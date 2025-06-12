@@ -36,6 +36,10 @@ export function cross(u: Vec2, v: Vec2): number {
     return u.x * v.y - u.y * v.x
 }
 
+export function cross3(a: Vec2, b: Vec2, c: Vec2): number {
+    return cross(subtract(b, a), subtract(c, a))
+}
+
 export function lengthSquared(v: Vec2): number {
     return dot(v, v)
 }
