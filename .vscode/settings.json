@@ -13,6 +13,7 @@
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "editor.formatOnSave": true,
         "editor.autoIndent": "full",
+        "prettier.tabWidth": 4,
     },
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
