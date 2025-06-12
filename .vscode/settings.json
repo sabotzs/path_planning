@@ -1,0 +1,27 @@
+{
+    "prettier.printWidth": 80,
+    "prettier.semi": false,
+    "prettier.useTabs": false,
+    "prettier.tabWidth": 2,
+
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.autoIndent": "full",
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.autoIndent": "full",
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.autoIndent": "full",
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.formatOnSave": true,
+        "editor.autoIndent": "full",
+    }
+}
