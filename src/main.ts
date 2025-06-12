@@ -1,6 +1,6 @@
 import { drawPolygon } from "./Draw"
-import { Polygon } from "./lib/Polygon"
-import { Vec2 } from "./lib/Vec2"
+import { Polygon } from "./models/Polygon"
+import { Vec2 } from "./models/Vec2"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
