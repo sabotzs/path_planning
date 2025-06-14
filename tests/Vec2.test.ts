@@ -137,3 +137,31 @@ describe("test dot product of vectors", () => {
         expect(result).toStrictEqual(expected)
     })
 })
+
+describe("test cross product", () => {
+    test("test cross product with null vector", () => {
+        const u = V2.Vec2(3, 4)
+        const v = V2.Vec2(0, 0)
+        const result = V2.cross(u, v)
+
+        expect(result).toStrictEqual(0)
+    })
+
+    test("test cross product with parallel vector", () => {
+        const u = V2.Vec2(1, 2)
+        const v = V2.Vec2(2, 4)
+        const result = V2.cross(u, v)
+
+        expect(result).toStrictEqual(0)
+    })
+
+    test("test cross product with perpendicular vector", () => {
+        const u = V2.Vec2(1, 1)
+        const v = V2.Vec2(-1, 1)
+        const result = V2.cross(u, v)
+
+        const expected = 2
+
+        expect(result).toStrictEqual(expected)
+    })
+})
