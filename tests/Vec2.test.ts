@@ -29,3 +29,33 @@ describe("test adding vectors", () => {
         expect(l).toStrictEqual(r)
     })
 })
+
+describe("test subtracting vectors", () => {
+    test("subtract two different vectors", () => {
+        const u = V2.Vec2(7, 2)
+        const v = V2.Vec2(3, 6)
+        const result = V2.subtract(u, v)
+
+        const expected = V2.Vec2(4, -4)
+
+        expect(result).toStrictEqual(expected)
+    })
+
+    test("subtracting nil vector", () => {
+        const u = V2.Vec2(7, 2)
+        const v = V2.Vec2(0, 0)
+        const result = V2.subtract(u, v)
+
+        expect(result).toStrictEqual(u)
+    })
+
+    test("subtracting from nil vector", () => {
+        const u = V2.Vec2(7, 2)
+        const v = V2.Vec2(0, 0)
+        const result = V2.subtract(v, u)
+
+        const expected = V2.Vec2(-7, -2)
+
+        expect(result).toStrictEqual(expected)
+    })
+})
