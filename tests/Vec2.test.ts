@@ -59,3 +59,43 @@ describe("test subtracting vectors", () => {
         expect(result).toStrictEqual(expected)
     })
 })
+
+describe("test scaling vectors", () => {
+    test("scaling with 0", () => {
+        const s = 0
+        const v = V2.Vec2(3, 2)
+        const result = V2.scale(v, s)
+
+        const expected = V2.Vec2(0, 0)
+
+        expect(result).toStrictEqual(expected)
+    })
+
+    test("scaling with 1", () => {
+        const s = 1
+        const v = V2.Vec2(3, 2)
+        const result = V2.scale(v, s)
+
+        expect(result).toStrictEqual(v)
+    })
+
+    test("scaling with positive", () => {
+        const s = 3
+        const v = V2.Vec2(4, 3)
+        const result = V2.scale(v, s)
+
+        const expected = V2.Vec2(12, 9)
+
+        expect(result).toStrictEqual(expected)
+    })
+
+    test("scaling with negative", () => {
+        const s = -1
+        const v = V2.Vec2(4, 3)
+        const result = V2.scale(v, s)
+
+        const expected = V2.Vec2(-4, -3)
+
+        expect(result).toStrictEqual(expected)
+    })
+})
