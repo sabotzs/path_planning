@@ -1,5 +1,5 @@
-import { Polygon } from "./models/Polygon"
-import { Vec2 } from "./models/Vec2"
+import { Polygon } from "../models/Polygon"
+import { Vec2 } from "../models/Vec2"
 
 export function drawPoint(ctx: CanvasRenderingContext2D, point: Vec2) {
     ctx.beginPath()

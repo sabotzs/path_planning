@@ -1,4 +1,4 @@
-import { drawPolygon } from "./Draw"
+import { drawPolygon } from "./drawing/Draw"
 import { Polygon } from "./models/Polygon"
 import { Vec2 } from "./models/Vec2"
 
