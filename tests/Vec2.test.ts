@@ -1,3 +1,4 @@
+import { version } from "typescript"
 import * as V2 from "../src/models/Vec2"
 
 describe("test adding vectors", () => {
@@ -95,6 +96,43 @@ describe("test scaling vectors", () => {
         const result = V2.scale(v, s)
 
         const expected = V2.Vec2(-4, -3)
+
+        expect(result).toStrictEqual(expected)
+    })
+})
+
+describe("test dot product of vectors", () => {
+    test("dot product with null vector", () => {
+        const u = V2.Vec2(4, 3)
+        const v = V2.Vec2(0, 0)
+        const result = V2.dot(u, v)
+
+        expect(result).toStrictEqual(0)
+    })
+
+    test("dot product with parallel vector", () => {
+        const u = V2.Vec2(1, 2)
+        const v = V2.Vec2(2, 4)
+        const result = V2.dot(u, v)
+
+        const expected = 10
+
+        expect(result).toStrictEqual(expected)
+    })
+
+    test("dot product with perpendicular vector", () => {
+        const u = V2.Vec2(2, 1)
+        const v = V2.Vec2(-2, 4)
+        const result = V2.dot(u, v)
+
+        expect(result).toStrictEqual(0)
+    })
+
+    test("dot product of self gives the squared length", () => {
+        const u = V2.Vec2(4, 3)
+        const result = V2.dot(u, u)
+
+        const expected = 25
 
         expect(result).toStrictEqual(expected)
     })
