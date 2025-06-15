@@ -1,5 +1,9 @@
-import { angleComparePoints } from "../src/algorithms/Utils"
-import { Vec2 } from "../src/models/Vec2"
+import {
+    angleComparePoints,
+    distanceToSegmentSquared,
+} from "../src/algorithms/Utils"
+import { LineSegment } from "../src/models/LineSegment"
+import { distanceSquared, Vec2 } from "../src/models/Vec2"
 
 describe("test angle comparison of points", () => {
     test("comparison of the same point", () => {
@@ -85,5 +89,76 @@ describe("test angle comparison of points", () => {
 
         expect(result1).toBeLessThan(0)
         expect(result2).toBeGreaterThan(0)
+    })
+})
+
+describe("test squared distance from point to segment", () => {
+    test("distance when segment is point", () => {
+        const point = Vec2(1, 1)
+        const segmentPoint = Vec2(2, 2)
+        const segment = LineSegment(segmentPoint, segmentPoint)
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 2
+
+        expect(result).toStrictEqual(expected)
+        expect(result).toStrictEqual(distanceSquared(point, segmentPoint))
+    })
+
+    test("distance when point is on segment", () => {
+        const point = Vec2(1, 1)
+        const segment = LineSegment(Vec2(0, 0), Vec2(2, 2))
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 0
+
+        expect(result).toStrictEqual(expected)
+        expect(result).toStrictEqual(distanceSquared(Vec2(1, 1), Vec2(1, 1)))
+    })
+
+    test("distance when perpendicular hits the segment", () => {
+        const point = Vec2(1, 1)
+        const segment = LineSegment(Vec2(0, 1), Vec2(1, 0))
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 0.5
+
+        expect(result).toBeCloseTo(expected)
+    })
+
+    test("distance when perpendiculat hits an end of the segment", () => {
+        const point = Vec2(1, 1)
+        const closest = Vec2(2, 1)
+        const segment = LineSegment(closest, Vec2(2, 3))
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 1
+
+        expect(result).toBeCloseTo(expected)
+        expect(result).toBeCloseTo(distanceSquared(point, closest))
+    })
+
+    test("distance when perpendicular doesn't hit the segment", () => {
+        const point = Vec2(1, 1)
+        const closest = Vec2(2, 2)
+        const segment = LineSegment(closest, Vec2(5, 2))
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 2
+
+        expect(result).toBeCloseTo(expected)
+        expect(result).toBeCloseTo(distanceSquared(point, closest))
+    })
+
+    test("distance when point is collinear, but not on segment", () => {
+        const point = Vec2(1, 1)
+        const closest = Vec2(2, 2)
+        const segment = LineSegment(closest, Vec2(4, 4))
+        const result = distanceToSegmentSquared(point, segment)
+
+        const expected = 2
+
+        expect(result).toBeCloseTo(expected)
+        expect(result).toBeCloseTo(distanceSquared(point, closest))
     })
 })
