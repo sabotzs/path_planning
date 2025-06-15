@@ -1,5 +1,6 @@
 import {
     angleComparePoints,
+    distanceCompareSegments,
     distanceToSegmentSquared,
 } from "../src/algorithms/Utils"
 import { LineSegment } from "../src/models/LineSegment"
@@ -160,5 +161,52 @@ describe("test squared distance from point to segment", () => {
 
         expect(result).toBeCloseTo(expected)
         expect(result).toBeCloseTo(distanceSquared(point, closest))
+    })
+})
+
+describe("test distance from point comparison of line segments", () => {
+    test("first segment is in front of the other, relative to point", () => {
+        const origin = Vec2(0, 0)
+        const first = LineSegment(Vec2(1, 0), Vec2(0, 1))
+        const second = LineSegment(Vec2(2, 0), Vec2(0, 2))
+        const result = distanceCompareSegments(origin, first, second)
+
+        expect(result).toBeLessThan(0)
+    })
+
+    test("second segment is in front of the other, relative to point", () => {
+        const origin = Vec2(0, 0)
+        const first = LineSegment(Vec2(2, 0), Vec2(0, 2))
+        const second = LineSegment(Vec2(1, 0), Vec2(0, 1))
+        const result = distanceCompareSegments(origin, first, second)
+
+        expect(result).toBeGreaterThan(0)
+    })
+
+    test("segments with equal distances to point", () => {
+        const origin = Vec2(0, 0)
+        const first = LineSegment(Vec2(-1, 0), Vec2(-1, 1))
+        const second = LineSegment(Vec2(1, 0), Vec2(1, 1))
+        const result = distanceCompareSegments(origin, first, second)
+
+        expect(result).toBe(0)
+    })
+
+    test("segments with common point", () => {
+        const origin = Vec2(0, 0)
+        const common = Vec2(1, 0)
+        const first = LineSegment(common, Vec2(2, 1))
+        const second = LineSegment(common, Vec2(2, -1))
+        const result = distanceCompareSegments(origin, first, second)
+
+        expect(result).toBe(0)
+    })
+
+    test("same segment", () => {
+        const origin = Vec2(0, 0)
+        const segment = LineSegment(Vec2(1, 0), Vec2(0, 1))
+        const result = distanceCompareSegments(origin, segment, segment)
+
+        expect(result).toBe(0)
     })
 })

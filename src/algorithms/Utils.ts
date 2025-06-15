@@ -43,3 +43,21 @@ export function distanceToSegmentSquared(
     const projection = add(segment.a, scale(ab, t))
     return distanceSquared(point, projection)
 }
+
+export function distanceCompareSegments(
+    origin: Vec2,
+    first: LineSegment,
+    second: LineSegment
+): number {
+    const distA = distanceToSegmentSquared(origin, first)
+    const distB = distanceToSegmentSquared(origin, second)
+    const diff = distA - distB
+
+    if (strictlyLess(diff, 0)) {
+        return -1
+    } else if (strictlyLess(0, diff)) {
+        return 1
+    } else {
+        return 0
+    }
+}
