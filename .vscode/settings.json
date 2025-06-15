@@ -14,6 +14,10 @@
         "editor.formatOnSave": true,
         "editor.autoIndent": "full",
         "prettier.tabWidth": 4,
+        "editor.codeActionsOnSave": {
+            "source.addMissingImports.ts": "always",
+            "source.removeUnusedImports": "always",
+        }
     },
     "[html]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",

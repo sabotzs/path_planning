@@ -1,5 +1,3 @@
-import { Vec2 } from "../models/Vec2"
-
 const { max, abs } = Math
 const { EPSILON } = Number
 
