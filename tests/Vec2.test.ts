@@ -1,4 +1,3 @@
-import { version } from "typescript"
 import * as V2 from "../src/models/Vec2"
 
 describe("test adding vectors", () => {
