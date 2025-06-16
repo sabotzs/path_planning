@@ -10,7 +10,7 @@ import {
     subtract,
     Vec2,
 } from "../models/Vec2"
-import { approxEq, strictlyLess } from "./Float"
+import { approxEq, approxEqVec, strictlyLess } from "./Float"
 
 export function angleComparePoints(origin: Vec2, a: Vec2, b: Vec2): number {
     const aAbove = a.y < origin.y
@@ -59,16 +59,18 @@ export function distanceCompareSegments(
     first: LineSegment,
     second: LineSegment
 ): number {
+    if (approxEqVec(first.a, second.a) && approxEqVec(first.b, second.b)) {
+        return 0
+    }
+
     const distA = distanceToSegmentSquared(origin, first)
     const distB = distanceToSegmentSquared(origin, second)
     const diff = distA - distB
 
-    if (strictlyLess(diff, 0)) {
-        return -1
-    } else if (strictlyLess(0, diff)) {
+    if (strictlyLess(0, diff)) {
         return 1
     } else {
-        return 0
+        return -1
     }
 }
 
