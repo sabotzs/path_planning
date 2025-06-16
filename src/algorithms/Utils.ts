@@ -1,6 +1,7 @@
 import { LineSegment } from "../models/LineSegment"
 import {
     add,
+    cross,
     cross3,
     distanceSquared,
     dot,
@@ -60,4 +61,39 @@ export function distanceCompareSegments(
     } else {
         return 0
     }
+}
+
+export function castRay(
+    origin: Vec2,
+    direction: Vec2,
+    segment: LineSegment
+): Vec2 | undefined {
+    const ab = subtract(segment.b, segment.a)
+    const det = cross(direction, ab)
+
+    if (approxEq(det, 0)) {
+        const abo = cross3(segment.a, segment.b, origin)
+        if (!approxEq(abo, 0)) {
+            return undefined
+        }
+
+        const dotA = dot(subtract(segment.a, origin), direction)
+        const dotB = dot(subtract(segment.b, origin), direction)
+
+        if (strictlyLess(dotA, 0) && strictlyLess(dotB, 0)) {
+            return undefined
+        } else if (strictlyLess(dotA, 0) || strictlyLess(dotB, 0)) {
+            return origin
+        } else {
+            return strictlyLess(dotA, dotB) ? segment.a : segment.b
+        }
+    }
+
+    const oa = subtract(segment.a, origin)
+    const t = cross(oa, ab) / det
+    const u = cross(oa, direction) / det
+    if (strictlyLess(t, 0) || strictlyLess(u, 0) || strictlyLess(1, u)) {
+        return undefined
+    }
+    return add(origin, scale(direction, t))
 }

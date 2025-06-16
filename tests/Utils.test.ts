@@ -1,10 +1,11 @@
 import {
     angleComparePoints,
+    castRay,
     distanceCompareSegments,
     distanceToSegmentSquared,
 } from "../src/algorithms/Utils"
 import { LineSegment } from "../src/models/LineSegment"
-import { distanceSquared, Vec2 } from "../src/models/Vec2"
+import { add, distanceSquared, scale, Vec2 } from "../src/models/Vec2"
 
 describe("test angle comparison of points", () => {
     test("comparison of the same point", () => {
@@ -208,5 +209,89 @@ describe("test distance from point comparison of line segments", () => {
         const result = distanceCompareSegments(origin, segment, segment)
 
         expect(result).toBe(0)
+    })
+})
+
+describe("test ray casting", () => {
+    test("cast ray to first end of segment", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(0, 1)
+        const a = Vec2(0, 5)
+        const b = Vec2(3, 4)
+        const segment = LineSegment(a, b)
+        const result = castRay(origin, direction, segment)
+
+        expect(result).toStrictEqual(a)
+    })
+
+    test("cast ray to second end of segment", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(3, 4)
+        const a = Vec2(0, 5)
+        const b = direction
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toStrictEqual(b)
+    })
+
+    test("cast ray to middle of segment", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(1, 1)
+        const a = Vec2(0, 2)
+        const b = Vec2(2, 0)
+        const expected = scale(add(a, b), 0.5)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toStrictEqual(expected)
+    })
+
+    test("cast ray to segment, which contains origin", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(0, 1)
+        const a = Vec2(-2, 0)
+        const b = Vec2(3, 0)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toStrictEqual(origin)
+    })
+
+    test("cast ray misses segment sideways", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(1, 0)
+        const a = Vec2(1, 1)
+        const b = Vec2(0, 2)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toBeUndefined()
+    })
+
+    test("cast ray parallel to segment segment misses", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(1, 0)
+        const a = Vec2(0, 1)
+        const b = Vec2(1, 1)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toBeUndefined()
+    })
+
+    test("cast ray to colinear segment hits the closer point", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(1, 0)
+        const a = Vec2(2, 0)
+        const b = Vec2(3, 0)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toStrictEqual(a)
+    })
+
+    test("cast ray to colinear segment in the opposite direction misses", () => {
+        const origin = Vec2(0, 0)
+        const direction = Vec2(-1, 0)
+        const a = Vec2(2, 0)
+        const b = Vec2(3, 0)
+        const result = castRay(origin, direction, LineSegment(a, b))
+
+        expect(result).toBeUndefined()
     })
 })
