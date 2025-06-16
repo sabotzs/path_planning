@@ -184,23 +184,23 @@ describe("test distance from point comparison of line segments", () => {
         expect(result).toBeGreaterThan(0)
     })
 
-    test("segments with equal distances to point result in the first being lesser", () => {
+    test("segments with equal distances to point result in the first being greater", () => {
         const origin = Vec2(0, 0)
         const first = LineSegment(Vec2(-1, 0), Vec2(-1, 1))
         const second = LineSegment(Vec2(1, 0), Vec2(1, 1))
         const result = distanceCompareSegments(origin, first, second)
 
-        expect(result).toBe(-1)
+        expect(result).toBe(1)
     })
 
-    test("segments with common point result in the first being lesser", () => {
+    test("segments with common point result in the first being greater", () => {
         const origin = Vec2(0, 0)
         const common = Vec2(1, 0)
         const first = LineSegment(common, Vec2(2, 1))
         const second = LineSegment(common, Vec2(2, -1))
         const result = distanceCompareSegments(origin, first, second)
 
-        expect(result).toBe(-1)
+        expect(result).toBe(1)
     })
 
     test("same segment result in being compared equal", () => {

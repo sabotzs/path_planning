@@ -67,10 +67,10 @@ export function distanceCompareSegments(
     const distB = distanceToSegmentSquared(origin, second)
     const diff = distA - distB
 
-    if (strictlyLess(0, diff)) {
-        return 1
-    } else {
+    if (strictlyLess(diff, 0)) {
         return -1
+    } else {
+        return 1
     }
 }
 
