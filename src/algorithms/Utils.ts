@@ -21,7 +21,16 @@ export function angleComparePoints(origin: Vec2, a: Vec2, b: Vec2): number {
 
     const oab = cross3(origin, a, b)
     if (approxEq(oab, 0)) {
-        return distanceSquared(origin, a) - distanceSquared(origin, b)
+        const distA = distanceSquared(origin, a)
+        const distB = distanceSquared(origin, b)
+
+        if (strictlyLess(distA, distB)) {
+            return -1
+        } else if (strictlyLess(distB, distA)) {
+            return 1
+        } else {
+            return 0
+        }
     }
 
     return strictlyLess(0, oab) ? -1 : 1

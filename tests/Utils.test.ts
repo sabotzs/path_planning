@@ -13,7 +13,7 @@ describe("test angle comparison of points", () => {
         const a = Vec2(1, 2)
         const result = angleComparePoints(origin, a, a)
 
-        expect(result).toBeCloseTo(0)
+        expect(result).toBe(0)
     })
 
     test("comparison of colinear points", () => {
@@ -23,8 +23,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant I and II", () => {
@@ -34,8 +34,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant I and III", () => {
@@ -45,8 +45,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant I and IV", () => {
@@ -56,8 +56,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant II and III", () => {
@@ -67,8 +67,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant II and IV", () => {
@@ -78,8 +78,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 
     test("comparison of points in quadrant III and IV", () => {
@@ -89,8 +89,8 @@ describe("test angle comparison of points", () => {
         const result1 = angleComparePoints(origin, a, b)
         const result2 = angleComparePoints(origin, b, a)
 
-        expect(result1).toBeLessThan(0)
-        expect(result2).toBeGreaterThan(0)
+        expect(result1).toBe(-1)
+        expect(result2).toBe(1)
     })
 })
 
