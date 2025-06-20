@@ -27,7 +27,27 @@ describe("test angle comparison of points", () => {
         expect(result2).toBe(1)
     })
 
-    test("comparison of collinear")
+    test("comparison of collinear point on the x-axis", () => {
+        const origin = Vec2(0, 0)
+        const a = Vec2(1, 0)
+        const b = Vec2(3, 0)
+        const c = Vec2(-2, 0)
+        const d = Vec2(-4, 0)
+
+        const resultAB = angleComparePoints(origin, a, b)
+        const resultAC = angleComparePoints(origin, a, c)
+        const resultAD = angleComparePoints(origin, a, d)
+        const resultBC = angleComparePoints(origin, b, c)
+        const resultBD = angleComparePoints(origin, b, d)
+        const resultCD = angleComparePoints(origin, c, d)
+
+        expect(resultAB).toBe(-1)
+        expect(resultAC).toBe(-1)
+        expect(resultAD).toBe(-1)
+        expect(resultBC).toBe(-1)
+        expect(resultBD).toBe(-1)
+        expect(resultCD).toBe(-1)
+    })
 
     test("comparison of points in quadrant I and II", () => {
         const origin = Vec2(0, 0)
