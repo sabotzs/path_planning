@@ -16,7 +16,7 @@ describe("test angle comparison of points", () => {
         expect(result).toBe(0)
     })
 
-    test("comparison of colinear points", () => {
+    test("comparison of collinear points", () => {
         const origin = Vec2(0, 0)
         const a = Vec2(1, 2)
         const b = Vec2(2, 4)
@@ -26,6 +26,8 @@ describe("test angle comparison of points", () => {
         expect(result1).toBe(-1)
         expect(result2).toBe(1)
     })
+
+    test("comparison of collinear")
 
     test("comparison of points in quadrant I and II", () => {
         const origin = Vec2(0, 0)
@@ -275,7 +277,7 @@ describe("test ray casting", () => {
         expect(result).toBeUndefined()
     })
 
-    test("cast ray to colinear segment hits the closer point", () => {
+    test("cast ray to collinear segment hits the closer point", () => {
         const origin = Vec2(0, 0)
         const direction = Vec2(1, 0)
         const a = Vec2(2, 0)
@@ -285,7 +287,7 @@ describe("test ray casting", () => {
         expect(result).toStrictEqual(a)
     })
 
-    test("cast ray to colinear segment in the opposite direction misses", () => {
+    test("cast ray to collinear segment in the opposite direction misses", () => {
         const origin = Vec2(0, 0)
         const direction = Vec2(-1, 0)
         const a = Vec2(2, 0)
