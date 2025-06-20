@@ -14,7 +14,9 @@ type Event = {
 
 export function visibilityFromPoint(
     origin: Vec2,
-    segments: LineSegment[]
+    segments: LineSegment[],
+    prev?: Vec2,
+    next?: Vec2
 ): Vec2[] {
     const events: Event[] = []
     const openEdges = new AvlTree<LineSegment>((a, b) =>
@@ -22,7 +24,7 @@ export function visibilityFromPoint(
     )
     generateEventsAndOpenEdges(origin, segments, events, openEdges)
     sortEvents(origin, events)
-    return processEvents(origin, events, openEdges)
+    return processEvents(origin, events, openEdges, prev, next)
 }
 
 function generateEventsAndOpenEdges(
@@ -75,8 +77,19 @@ function sortEvents(origin: Vec2, events: Event[]) {
 function processEvents(
     origin: Vec2,
     events: Event[],
-    openEdges: AvlTree<LineSegment>
+    openEdges: AvlTree<LineSegment>,
+    prev?: Vec2,
+    next?: Vec2
 ): Vec2[] {
+    const inVisibleHalfPlane = (eventPoint: Vec2) => {
+        if (prev && next) {
+            const ope = cross3(origin, prev, eventPoint)
+            const one = cross3(origin, next, eventPoint)
+            return !strictlyLess(ope, 0) || !strictlyLess(0, one)
+        } else {
+            return true
+        }
+    }
     const visible: Vec2[] = []
 
     for (const event of events) {
@@ -84,20 +97,25 @@ function processEvents(
             openEdges.remove(event.segment)
         }
 
-        if (openEdges.count() === 0) {
-            visible.push(event.point)
-        } else {
-            const nearest = openEdges.min()!.getValue()
-            const direction = subtract(event.point, origin)
-            const intersection = castRay(origin, direction, nearest)
-
-            if (!intersection) {
+        if (inVisibleHalfPlane(event.point)) {
+            if (openEdges.count() === 0) {
                 visible.push(event.point)
             } else {
-                const distEventPoint = distanceSquared(origin, event.point)
-                const distIntersection = distanceSquared(origin, intersection)
-                if (strictlyLess(distEventPoint, distIntersection)) {
+                const nearest = openEdges.min()!.getValue()
+                const direction = subtract(event.point, origin)
+                const intersection = castRay(origin, direction, nearest)
+
+                if (!intersection) {
                     visible.push(event.point)
+                } else {
+                    const distEventPoint = distanceSquared(origin, event.point)
+                    const distIntersection = distanceSquared(
+                        origin,
+                        intersection
+                    )
+                    if (strictlyLess(distEventPoint, distIntersection)) {
+                        visible.push(event.point)
+                    }
                 }
             }
         }
