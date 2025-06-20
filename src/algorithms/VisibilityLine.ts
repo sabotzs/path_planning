@@ -3,6 +3,7 @@ import { cross3, distanceSquared, subtract, Vec2 } from "../models/Vec2"
 import { LineSegment } from "../models/LineSegment"
 import { approxEqVec, strictlyLess } from "./Float"
 import { angleComparePoints, castRay, distanceCompareSegments } from "./Utils"
+import { Polygon } from "../models/Polygon"
 
 type EventType = "start" | "end"
 
@@ -10,6 +11,34 @@ type Event = {
     point: Vec2
     segment: LineSegment
     type: EventType
+}
+
+export function visibilityLines(
+    start: Vec2,
+    target: Vec2,
+    obstacles: Polygon[],
+    segments: LineSegment[]
+): Map<Vec2, Vec2[]> {
+    const result = new Map<Vec2, Vec2[]>()
+    result.set(start, visibilityFromPoint(start, segments))
+    result.set(target, visibilityFromPoint(target, segments))
+
+    obstacles.forEach((obstacle) => {
+        obstacle.points.forEach((point, index) => {
+            const nextIndex = (index + 1) % obstacle.points.length
+            const prevIndex =
+                (obstacle.points.length + index - 1) % obstacle.points.length
+            const visiblePoints = visibilityFromPoint(
+                point,
+                segments,
+                obstacle.points[prevIndex],
+                obstacle.points[nextIndex]
+            )
+            result.set(point, visiblePoints)
+        })
+    })
+
+    return result
 }
 
 export function visibilityFromPoint(

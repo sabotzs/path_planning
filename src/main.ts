@@ -1,5 +1,5 @@
 import { minkowskiSum } from "./algorithms/MinkowskiSum"
-import { visibilityFromPoint } from "./algorithms/VisibilityLine"
+import { visibilityLines } from "./algorithms/VisibilityLine"
 import { drawLineSegment, drawPoint, drawPolygon } from "./drawing/Draw"
 import { offsetPolygon, Polygon, polygonToLineSegments } from "./models/Polygon"
 import { Vec2 } from "./models/Vec2"
@@ -41,23 +41,33 @@ const obstacles: Polygon[] = [
   ]),
 ]
 
+const target = Vec2(200, 400)
+
 function draw() {
-    // drawPolygon(ctx, character)
-    // obstacles.forEach((obstacle) => drawPolygon(ctx, obstacle))
-    const pivot = character.points[0]
+    const origin = character.points[0]
     const minkowskiSums = obstacles
         .map((obstacle) => minkowskiSum(character, obstacle))
-        .map((obstacle) => offsetPolygon(obstacle, pivot))
+        .map((obstacle) => offsetPolygon(obstacle, origin))
     const lineSegments = minkowskiSums.flatMap((obstacle) =>
         polygonToLineSegments(obstacle)
     )
 
     minkowskiSums.forEach((p) => console.log(p))
+    const visibilityGraph = visibilityLines(
+        origin,
+        target,
+        minkowskiSums,
+        lineSegments
+    )
 
-    const origin = Vec2(300, 300)
-    const visible = visibilityFromPoint(pivot, lineSegments)
-
-    drawPoint(ctx, pivot)
+    drawPoint(ctx, origin)
+    drawPoint(ctx, target)
     minkowskiSums.forEach((obstacle) => drawPolygon(ctx, obstacle))
-    visible.forEach((point) => drawLineSegment(ctx, pivot, point))
+
+    ctx.strokeStyle = "rgb(255, 0, 0)"
+    visibilityGraph.forEach((visiblePoints, point) => {
+        visiblePoints.forEach((visiblePoint) => {
+            drawLineSegment(ctx, point, visiblePoint)
+        })
+    })
 }
