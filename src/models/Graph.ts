@@ -1,8 +1,8 @@
 import { Vec2 } from "./Vec2"
 
 export type GraphEdge = {
-    to: Vec2
-    dist: number
+    vertex: Vec2
+    distance: number
 }
 
 export type Graph = Map<Vec2, GraphEdge[]>

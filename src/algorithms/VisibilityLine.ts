@@ -72,7 +72,7 @@ export function visibilityFromPoint(
     sortEvents(origin, events)
     const visiblePoints = processEvents(origin, events, openEdges, prev, next)
     return visiblePoints.map((point) => {
-        return { to: point, dist: distance(origin, point) }
+        return { vertex: point, distance: distance(origin, point) }
     })
 }
 
