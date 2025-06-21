@@ -9,7 +9,7 @@ type EventType = "start" | "end"
 
 type Event = {
     point: Vec2
-    segment: LineSegment
+    segment?: LineSegment
     type: EventType
 }
 
@@ -20,8 +20,8 @@ export function visibilityLines(
     segments: LineSegment[]
 ): Map<Vec2, Vec2[]> {
     const result = new Map<Vec2, Vec2[]>()
-    result.set(start, visibilityFromPoint(start, segments))
-    result.set(target, visibilityFromPoint(target, segments))
+    result.set(start, visibilityFromPoint(start, segments, undefined, target))
+    result.set(target, visibilityFromPoint(target, segments, start, undefined))
 
     obstacles.forEach((obstacle) => {
         obstacle.points.forEach((point, index) => {
@@ -31,6 +31,8 @@ export function visibilityLines(
             const visiblePoints = visibilityFromPoint(
                 point,
                 segments,
+                start,
+                target,
                 obstacle.points[prevIndex],
                 obstacle.points[nextIndex]
             )
@@ -44,6 +46,8 @@ export function visibilityLines(
 export function visibilityFromPoint(
     origin: Vec2,
     segments: LineSegment[],
+    start: Vec2 | undefined,
+    target: Vec2 | undefined,
     prev?: Vec2,
     next?: Vec2
 ): Vec2[] {
@@ -52,6 +56,12 @@ export function visibilityFromPoint(
         distanceCompareSegments(origin, a, b)
     )
     generateEventsAndOpenEdges(origin, segments, events, openEdges)
+    if (start) {
+        events.push({ point: start, type: "end" })
+    }
+    if (target) {
+        events.push({ point: target, type: "end" })
+    }
     sortEvents(origin, events)
     return processEvents(origin, events, openEdges, prev, next)
 }
@@ -122,7 +132,7 @@ function processEvents(
     const visible: Vec2[] = []
 
     for (const event of events) {
-        if (event.type === "end") {
+        if (event.type === "end" && event.segment) {
             openEdges.remove(event.segment)
         }
 
@@ -149,7 +159,7 @@ function processEvents(
             }
         }
 
-        if (event.type === "start") {
+        if (event.type === "start" && event.segment) {
             openEdges.insert(event.segment)
         }
     }
