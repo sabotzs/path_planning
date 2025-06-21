@@ -1,9 +1,16 @@
 import { AvlTree } from "@datastructures-js/binary-search-tree"
-import { cross3, distanceSquared, subtract, Vec2 } from "../models/Vec2"
+import {
+    cross3,
+    distance,
+    distanceSquared,
+    subtract,
+    Vec2,
+} from "../models/Vec2"
 import { LineSegment } from "../models/LineSegment"
 import { approxEqVec, strictlyLess } from "./Float"
 import { angleComparePoints, castRay, distanceCompareSegments } from "./Utils"
 import { Polygon } from "../models/Polygon"
+import { Graph, GraphEdge } from "../models/Graph"
 
 type EventType = "start" | "end"
 
@@ -18,8 +25,8 @@ export function visibilityLines(
     target: Vec2,
     obstacles: Polygon[],
     segments: LineSegment[]
-): Map<Vec2, Vec2[]> {
-    const result = new Map<Vec2, Vec2[]>()
+): Graph {
+    const result = new Map<Vec2, GraphEdge[]>()
     result.set(start, visibilityFromPoint(start, segments, undefined, target))
     result.set(target, visibilityFromPoint(target, segments, start, undefined))
 
@@ -50,7 +57,7 @@ export function visibilityFromPoint(
     target: Vec2 | undefined,
     prev?: Vec2,
     next?: Vec2
-): Vec2[] {
+): GraphEdge[] {
     const events: Event[] = []
     const openEdges = new AvlTree<LineSegment>((a, b) =>
         distanceCompareSegments(origin, a, b)
@@ -63,7 +70,10 @@ export function visibilityFromPoint(
         events.push({ point: target, type: "end" })
     }
     sortEvents(origin, events)
-    return processEvents(origin, events, openEdges, prev, next)
+    const visiblePoints = processEvents(origin, events, openEdges, prev, next)
+    return visiblePoints.map((point) => {
+        return { to: point, dist: distance(origin, point) }
+    })
 }
 
 function generateEventsAndOpenEdges(

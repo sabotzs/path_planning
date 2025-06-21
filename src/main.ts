@@ -67,7 +67,7 @@ function draw() {
     ctx.strokeStyle = "rgb(255, 0, 0)"
     visibilityGraph.forEach((visiblePoints, point) => {
         visiblePoints.forEach((visiblePoint) => {
-            drawLineSegment(ctx, point, visiblePoint)
+            drawLineSegment(ctx, point, visiblePoint.to)
         })
     })
 }

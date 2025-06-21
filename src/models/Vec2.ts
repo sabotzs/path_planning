@@ -47,3 +47,7 @@ export function lengthSquared(v: Vec2): number {
 export function distanceSquared(u: Vec2, v: Vec2): number {
     return lengthSquared(subtract(u, v))
 }
+
+export function distance(u: Vec2, v: Vec2): number {
+    return Math.sqrt(distanceSquared(u, v))
+}
