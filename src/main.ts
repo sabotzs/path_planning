@@ -1,3 +1,4 @@
+import { dijkstra } from "./algorithms/Dijkstra"
 import { minkowskiSum } from "./algorithms/MinkowskiSum"
 import { visibilityLines } from "./algorithms/VisibilityLine"
 import { drawLineSegment, drawPoint, drawPolygon } from "./drawing/Draw"
@@ -70,4 +71,10 @@ function draw() {
             drawLineSegment(ctx, point, visiblePoint.vertex)
         })
     })
+
+    ctx.strokeStyle = "rgb(0, 0, 255)"
+    const path = dijkstra(origin, target, visibilityGraph)
+    for (let i = 1; i < path.length; ++i) {
+        drawLineSegment(ctx, path[i - 1], path[i])
+    }
 }

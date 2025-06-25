@@ -4,7 +4,7 @@ import { FibonacciHeap, INode } from "@tyriar/fibonacci-heap"
 
 export function dijkstra(start: Vec2, target: Vec2, graph: Graph): Vec2[] {
     const queue = new FibonacciHeap<GraphEdge, any>((a, b) => {
-        return b.key.distance - a.key.distance
+        return a.key.distance - b.key.distance
     })
     const parent = new Map<Vec2, Vec2>()
     const distance = new Map<Vec2, number>()
@@ -13,11 +13,11 @@ export function dijkstra(start: Vec2, target: Vec2, graph: Graph): Vec2[] {
     distance.set(start, 0)
     queue.insert({ vertex: start, distance: 0 })
 
-    while (queue.isEmpty()) {
+    while (!queue.isEmpty()) {
         const current = queue.extractMinimum()!.key.vertex
 
         if (current === target) {
-            return reconstructPath(start, target, parent)
+            return reconstructPath(target, parent)
         }
 
         for (const edge of graph.get(current)!) {
@@ -25,7 +25,7 @@ export function dijkstra(start: Vec2, target: Vec2, graph: Graph): Vec2[] {
             const newDistance = distance.get(current)! + edge.distance
             const oldDistance = distance.get(adjacent)
 
-            if (!oldDistance || newDistance < oldDistance) {
+            if (oldDistance == undefined || newDistance < oldDistance) {
                 parent.set(adjacent, current)
                 distance.set(adjacent, newDistance)
 
@@ -47,11 +47,7 @@ export function dijkstra(start: Vec2, target: Vec2, graph: Graph): Vec2[] {
     return []
 }
 
-function reconstructPath(
-    from: Vec2,
-    target: Vec2,
-    parents: Map<Vec2, Vec2>
-): Vec2[] {
+function reconstructPath(target: Vec2, parents: Map<Vec2, Vec2>): Vec2[] {
     let current = target
 
     const result = [current]
