@@ -1,0 +1,38 @@
+.info-icon {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 3px solid black;
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  font-weight: bold;
+  font-family: sans-serif;
+  text-align: center;
+  line-height: 30px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.info-icon .tooltip {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 33px;
+  right: 50%;
+  background-color: #333333;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 14px;
+  transition: opacity 0.3s ease;
+  z-index: 100;
+}
+
+.info-icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
