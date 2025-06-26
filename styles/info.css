@@ -11,9 +11,9 @@
   font-family: sans-serif;
   text-align: center;
   line-height: 30px;
-  cursor: pointer;
   user-select: none;
   transition: background-color 0.3s ease;
+  margin-bottom: 30px;
 }
 
 .info-icon .tooltip {
