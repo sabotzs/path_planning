@@ -1,4 +1,4 @@
-#buttonGroup {
+#button-group {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -7,7 +7,7 @@
   gap: 10px;
 }
 
-#buttonGroup button {
+#button-group button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
@@ -18,15 +18,15 @@
   transition: background-color 0.3s ease;
 }
 
-#buttonGroup button:hover {
+#button-group button:hover {
   background-color: #a5a9ee;
 }
 
-#buttonGroup button span {
+#button-group button span {
   display: inline-block;
   transition: transform 0.1s ease;
 }
 
-#buttonGroup button:active span {
+#button-group button:active span {
   transform: scale(0.97);
 }
