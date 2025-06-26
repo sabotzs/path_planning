@@ -1,4 +1,4 @@
-import * as V2 from "../src/models/Vec2"
+import * as V2 from "../src/ts/models/Vec2"
 
 describe("test adding vectors", () => {
     test("adding two different vectors", () => {
