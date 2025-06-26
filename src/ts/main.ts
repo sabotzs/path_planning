@@ -9,8 +9,8 @@ const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 
 window.addEventListener("load", () => {
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
+    canvas.width = canvas.clientWidth
+    canvas.height = canvas.clientHeight
     draw()
 })
 

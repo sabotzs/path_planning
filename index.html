@@ -2,22 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Canvas</title>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        width: 100%;
-        overflow: hidden;
-      }
-      canvas {
-        display: block;
-      }
-    </style>
-    <script type="module" src="/src/main.ts"></script>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+    <script type="module" src="/src/ts/main.ts"></script>
   </head>
   <body>
-    <canvas id="canvas" width="150" height="150"></canvas>
+    <div id="container">
+      <canvas id="canvas"></canvas>
+      <div id="buttonGroup">
+        <button><span>Button 1</span></button>
+        <button><span>Button 2</span></button>
+        <button><span>Button 3</span></button>
+        <button><span>Button 4</span></button>
+      </div>
+    </div>
   </body>
 </html>
