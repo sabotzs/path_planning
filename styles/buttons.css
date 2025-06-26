@@ -1,0 +1,32 @@
+#buttonGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
+
+#buttonGroup button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #9598e2;
+  border: 1px solid black;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+#buttonGroup button:hover {
+  background-color: #a5a9ee;
+}
+
+#buttonGroup button span {
+  display: inline-block;
+  transition: transform 0.1s ease;
+}
+
+#buttonGroup button:active span {
+  transform: scale(0.97);
+}
