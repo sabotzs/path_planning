@@ -3,9 +3,9 @@ import {
     castRay,
     distanceCompareSegments,
     distanceToSegmentSquared,
-} from "../src/ts/algorithms/Utils"
-import { LineSegment } from "../src/ts/models/LineSegment"
-import { add, distanceSquared, scale, Vec2 } from "../src/ts/models/Vec2"
+} from "../src/algorithms/Utils"
+import { LineSegment } from "../src/models/LineSegment"
+import { add, distanceSquared, scale, Vec2 } from "../src/models/Vec2"
 
 describe("test angle comparison of points", () => {
     test("comparison of the same point", () => {
