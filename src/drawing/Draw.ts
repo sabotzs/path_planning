@@ -19,6 +19,8 @@ export function drawLineSegment(
 }
 
 export function drawPolygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
+    polygon.points.forEach((point) => drawPoint(ctx, point))
+
     if (polygon.points.length < 2) {
         return
     }
@@ -28,9 +30,21 @@ export function drawPolygon(ctx: CanvasRenderingContext2D, polygon: Polygon) {
     ctx.moveTo(last.x, last.y)
     polygon.points.forEach((point) => {
         ctx.lineTo(point.x, point.y)
-        ctx.moveTo(point.x, point.y)
     })
     ctx.stroke()
+}
 
-    polygon.points.forEach((point) => drawPoint(ctx, point))
+export function drawPath(ctx: CanvasRenderingContext2D, points: Vec2[]) {
+    points.forEach((point) => drawPoint(ctx, point))
+
+    if (points.length < 2) {
+        return
+    }
+
+    ctx.beginPath()
+    ctx.moveTo(points[0].x, points[0].y)
+    for (let i = 1; i < points.length; ++i) {
+        ctx.lineTo(points[i].x, points[i].y)
+    }
+    ctx.stroke()
 }

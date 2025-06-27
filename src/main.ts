@@ -1,80 +1,62 @@
-import { dijkstra } from "./algorithms/Dijkstra"
-import { minkowskiSum } from "./algorithms/MinkowskiSum"
-import { visibilityLines } from "./algorithms/VisibilityLine"
-import { drawLineSegment, drawPoint, drawPolygon } from "./drawing/Draw"
-import { offsetPolygon, Polygon, polygonToLineSegments } from "./models/Polygon"
+import { drawPath, drawPolygon } from "./drawing/Draw"
+import { Polygon } from "./models/Polygon"
 import { Vec2 } from "./models/Vec2"
 
+// MARK: State
+let isCreatingCharacter = false
+
+// MARK: Objects
+const character = Polygon([])
+
+// MARK: Elements
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 
+const createCharacterButton = document.getElementById(
+    "createCharacter"
+) as HTMLButtonElement
+
+// MARK: Events
 window.addEventListener("load", () => {
     canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
-    draw()
+    // draw()
 })
 
-// MARK: Objects
-// prettier-ignore
-const character = Polygon([
-  Vec2(50, 50),
-  Vec2(75, 50),
-  Vec2(75, 75),
-  // Vec2(50, 75),
-])
+canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect()
+    const point = Vec2(event.clientX - rect.x, event.clientY - rect.y)
 
-// prettier-ignore
-const obstacles: Polygon[] = [
-  Polygon([
-    Vec2(150, 75),
-    Vec2(250, 75),
-    Vec2(200, 150)
-  ]),
-  Polygon([
-    Vec2(400, 125),
-    Vec2(450, 200),
-    Vec2(360, 150),
-  ]),
-  Polygon([
-    Vec2(400, 500),
-    Vec2(500, 400),
-    Vec2(500, 500),
-  ]),
-]
+    if (isCreatingCharacter) {
+        character.points.push(point)
+        draw()
+    }
+})
 
-const target = Vec2(200, 400)
+createCharacterButton.addEventListener("click", (event) => {
+    isCreatingCharacter = !isCreatingCharacter
+    createCharacterButton.classList.toggle("active", isCreatingCharacter)
+    createCharacterButton.textContent = isCreatingCharacter
+        ? "Creating character"
+        : "Create character"
+    if (!isCreatingCharacter) {
+        draw()
+    }
+})
 
 function draw() {
-    const origin = character.points[0]
-    const minkowskiSums = obstacles
-        .map((obstacle) => minkowskiSum(character, obstacle))
-        .map((obstacle) => offsetPolygon(obstacle, origin))
-    const lineSegments = minkowskiSums.flatMap((obstacle) =>
-        polygonToLineSegments(obstacle)
-    )
+    ctx.reset()
+    drawCharacter()
+}
 
-    minkowskiSums.forEach((p) => console.log(p))
-    const visibilityGraph = visibilityLines(
-        origin,
-        target,
-        minkowskiSums,
-        lineSegments
-    )
+function drawCharacter() {
+    const style = "rgb(31, 109, 46)"
+    ctx.strokeStyle = style
+    ctx.fillStyle = style
 
-    drawPoint(ctx, origin)
-    drawPoint(ctx, target)
-    minkowskiSums.forEach((obstacle) => drawPolygon(ctx, obstacle))
-
-    ctx.strokeStyle = "rgb(255, 0, 0)"
-    visibilityGraph.forEach((visiblePoints, point) => {
-        visiblePoints.forEach((visiblePoint) => {
-            drawLineSegment(ctx, point, visiblePoint.vertex)
-        })
-    })
-
-    ctx.strokeStyle = "rgb(0, 0, 255)"
-    const path = dijkstra(origin, target, visibilityGraph)
-    for (let i = 1; i < path.length; ++i) {
-        drawLineSegment(ctx, path[i - 1], path[i])
+    if (isCreatingCharacter) {
+        drawPath(ctx, character.points)
+    } else {
+        drawPolygon(ctx, character)
     }
 }
