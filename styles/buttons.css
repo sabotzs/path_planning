@@ -8,10 +8,12 @@
 }
 
 #buttonGroup button {
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  background-color: #9598e2;
+  background-color: green;
+  color: white;
   border: 1px solid black;
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -19,7 +21,7 @@
 }
 
 #buttonGroup button:hover {
-  background-color: #a5a9ee;
+  background-color: rgb(53, 167, 53);
 }
 
 #buttonGroup button span {
@@ -27,6 +29,14 @@
   transition: transform 0.1s ease;
 }
 
-#buttonGroup button:active span {
+#buttonGroup button.active {
+  background-color: rgb(200, 0, 0);
+}
+
+#buttonGroup button.active:hover {
+  background-color: rgb(223, 57, 57);
+}
+
+#buttonGroup button.active span {
   transform: scale(0.97);
 }
