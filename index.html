@@ -6,16 +6,23 @@
     <title>Canvas</title>
     <link rel="stylesheet" href="/styles/style.css" />
     <link rel="stylesheet" href="/styles/buttons.css" />
-    <link rel="stylesheet" href="/styles/info.css" />
+    <link rel="stylesheet" href="/styles/icons.css" />
     <script type="module" src="/src/main.ts"></script>
   </head>
   <body>
     <div id="container">
       <canvas id="canvas"></canvas>
       <div id="buttonGroup">
-        <div class="infoIcon">
-          <img src="/resources/Info.svg" />
-          <div class="tooltip">This is your helpful info message!</div>
+        <div id="icons">
+          <div class="icon" id="errorIcon">
+            <img src="/resources/x-mark.svg" />
+            <div class="tooltip">This is the error message</div>
+          </div>
+
+          <div class="icon" id="ïnfoIcon">
+            <img src="/resources/info.svg" />
+            <div class="tooltip">This is your helpful info message!</div>
+          </div>
         </div>
         <button id="createCharacter"><span>Create character</span></button>
         <button><span>Button 2</span></button>
