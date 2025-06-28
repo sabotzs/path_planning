@@ -73,19 +73,27 @@ createTargetButton.addEventListener("click", (event) => {
 
 createObstacleButton.addEventListener("click", (event) => {
     if (createdObstacle) {
-        obstacles.push(createdObstacle)
-        createdObstacle = undefined
+        stopCreatingObstacle()
         draw()
     } else {
-        createdObstacle = Polygon([])
+        startCreatingObstacle()
     }
-    createObstacleButton.classList.toggle(
-        "active",
-        createdObstacle !== undefined
-    )
-    createObstacleButton.textContent =
-        createdObstacle !== undefined ? "Creating obstacle" : "Create obstacle"
 })
+
+function startCreatingObstacle() {
+    createdObstacle = Polygon([])
+    createObstacleButton.classList.toggle("active", true)
+    createObstacleButton.textContent = "Creating obstacle"
+}
+
+function stopCreatingObstacle() {
+    if (!createdObstacle) return
+
+    obstacles.push(createdObstacle)
+    createdObstacle = undefined
+    createObstacleButton.classList.toggle("active", false)
+    createObstacleButton.textContent = "Create obstacle"
+}
 
 function startCreatingCharacter() {
     character = Polygon([])
