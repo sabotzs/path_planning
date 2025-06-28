@@ -59,6 +59,12 @@ createCharacterButton.addEventListener("click", (event) => {
     } else {
         startCreatingCharacter()
     }
+    if (isCreatingTarget) {
+        stopCreatingTarget()
+    }
+    if (createdObstacle) {
+        stopCreatingObstacle()
+    }
     draw()
 })
 
@@ -68,16 +74,28 @@ createTargetButton.addEventListener("click", (event) => {
     } else {
         startCreatingTarget()
     }
+    if (isCreatingCharacter) {
+        stopCreatingCharacter()
+    }
+    if (createdObstacle) {
+        stopCreatingObstacle()
+    }
     draw()
 })
 
 createObstacleButton.addEventListener("click", (event) => {
     if (createdObstacle) {
         stopCreatingObstacle()
-        draw()
     } else {
         startCreatingObstacle()
     }
+    if (isCreatingCharacter) {
+        stopCreatingCharacter()
+    }
+    if (isCreatingTarget) {
+        stopCreatingTarget()
+    }
+    draw()
 })
 
 function startCreatingObstacle() {
