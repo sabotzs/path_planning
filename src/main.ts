@@ -9,6 +9,8 @@ let isCreatingTarget = false
 // MARK: Objects
 const character = Polygon([])
 const target = Polygon([])
+const obstacles: Polygon[] = []
+let createdObstacle: Polygon | undefined = undefined
 
 // MARK: Elements
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
@@ -19,6 +21,9 @@ const createCharacterButton = document.getElementById(
 ) as HTMLButtonElement
 const createTargetButton = document.getElementById(
     "createTarget"
+) as HTMLButtonElement
+const createObstacleButton = document.getElementById(
+    "createObstacle"
 ) as HTMLButtonElement
 
 // MARK: Events
@@ -39,6 +44,11 @@ canvas.addEventListener("click", (event) => {
 
     if (isCreatingTarget) {
         target.points.push(point)
+        draw()
+    }
+
+    if (createdObstacle) {
+        createdObstacle.points.push(point)
         draw()
     }
 })
@@ -67,10 +77,27 @@ createTargetButton.addEventListener("click", (event) => {
     }
 })
 
+createObstacleButton.addEventListener("click", (event) => {
+    if (createdObstacle) {
+        obstacles.push(createdObstacle)
+        createdObstacle = undefined
+        draw()
+    } else {
+        createdObstacle = Polygon([])
+    }
+    createObstacleButton.classList.toggle(
+        "active",
+        createdObstacle !== undefined
+    )
+    createObstacleButton.textContent =
+        createdObstacle !== undefined ? "Creating obstacle" : "Create obstacle"
+})
+
 function draw() {
     ctx.reset()
     drawCharacter()
     drawTarget()
+    drawObstacles()
 }
 
 function drawCharacter() {
@@ -94,5 +121,19 @@ function drawTarget() {
         drawPath(ctx, target.points)
     } else {
         drawPolygon(ctx, target)
+    }
+}
+
+function drawObstacles() {
+    const style = "rgb(0, 0, 0)"
+    ctx.strokeStyle = style
+    ctx.fillStyle = style
+
+    obstacles.forEach((obstacle) => {
+        drawPolygon(ctx, obstacle)
+    })
+
+    if (createdObstacle) {
+        drawPath(ctx, createdObstacle.points)
     }
 }
