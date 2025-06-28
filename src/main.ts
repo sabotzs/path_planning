@@ -108,7 +108,7 @@ function startCreatingTarget() {
 }
 
 function stopCreatingTarget() {
-    isCreatingTarget = true
+    isCreatingTarget = false
     createTargetButton.classList.toggle("active", false)
     createTargetButton.textContent = "Create target"
 }
