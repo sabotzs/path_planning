@@ -8,7 +8,7 @@ let isCreatingTarget = false
 
 // MARK: Objects
 let character = Polygon([])
-const target = Polygon([])
+let target = Polygon([])
 const obstacles: Polygon[] = []
 let createdObstacle: Polygon | undefined = undefined
 
@@ -63,15 +63,12 @@ createCharacterButton.addEventListener("click", (event) => {
 })
 
 createTargetButton.addEventListener("click", (event) => {
-    isCreatingTarget = !isCreatingTarget
-    createTargetButton.classList.toggle("active", isCreatingTarget)
-    createTargetButton.textContent = isCreatingTarget
-        ? "Creating target"
-        : "Create target"
-
-    if (!isCreatingTarget) {
-        draw()
+    if (isCreatingTarget) {
+        stopCreatingTarget()
+    } else {
+        startCreatingTarget()
     }
+    draw()
 })
 
 createObstacleButton.addEventListener("click", (event) => {
@@ -101,6 +98,19 @@ function stopCreatingCharacter() {
     isCreatingCharacter = false
     createCharacterButton.classList.toggle("active", false)
     createCharacterButton.textContent = "Create character"
+}
+
+function startCreatingTarget() {
+    target = Polygon([])
+    isCreatingTarget = true
+    createTargetButton.classList.toggle("active", true)
+    createTargetButton.textContent = "Creating target"
+}
+
+function stopCreatingTarget() {
+    isCreatingTarget = true
+    createTargetButton.classList.toggle("active", false)
+    createTargetButton.textContent = "Create target"
 }
 
 // MARK: Drawing
