@@ -146,7 +146,6 @@ createObstacleButton.addEventListener("click", (event) => {
 function startCreatingObstacle() {
     createdObstacle = Polygon([])
     createObstacleButton.classList.toggle("active", true)
-    createObstacleButton.textContent = "Creating obstacle"
 }
 
 function stopCreatingObstacle() {
@@ -155,33 +154,28 @@ function stopCreatingObstacle() {
     obstacles.push(createdObstacle)
     createdObstacle = undefined
     createObstacleButton.classList.toggle("active", false)
-    createObstacleButton.textContent = "Create obstacle"
 }
 
 function startCreatingCharacter() {
     character = Polygon([])
     isCreatingCharacter = true
     createCharacterButton.classList.toggle("active", true)
-    createCharacterButton.textContent = "Creating character"
 }
 
 function stopCreatingCharacter() {
     isCreatingCharacter = false
     createCharacterButton.classList.toggle("active", false)
-    createCharacterButton.textContent = "Create character"
 }
 
 function startCreatingTarget() {
     target = Polygon([])
     isCreatingTarget = true
     createTargetButton.classList.toggle("active", true)
-    createTargetButton.textContent = "Creating target"
 }
 
 function stopCreatingTarget() {
     isCreatingTarget = false
     createTargetButton.classList.toggle("active", false)
-    createTargetButton.textContent = "Create target"
 }
 
 // MARK: Drawing
