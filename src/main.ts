@@ -1,10 +1,14 @@
-import { drawPath, drawPolygon } from "./drawing/Draw"
+import { drawPath, drawPoint, drawPolygon } from "./drawing/Draw"
 import { Polygon } from "./models/Polygon"
-import { Vec2 } from "./models/Vec2"
+import { distance, Vec2 } from "./models/Vec2"
+
+// MARK: Constants
+const approximationRadius = 8
 
 // MARK: State
 let isCreatingCharacter = false
 let isCreatingTarget = false
+let isMouseHoveringPoint = false
 
 // MARK: Objects
 let character = Polygon([])
@@ -34,24 +38,65 @@ window.addEventListener("load", () => {
 })
 
 canvas.addEventListener("click", (event) => {
-    const rect = canvas.getBoundingClientRect()
-    const point = Vec2(event.clientX - rect.x, event.clientY - rect.y)
+    const eventPoint = eventPointToCanvasPoint(event)
 
     if (isCreatingCharacter) {
-        character.points.push(point)
+        handleClickOnObject(eventPoint, character, stopCreatingCharacter)
         draw()
     }
 
     if (isCreatingTarget) {
-        target.points.push(point)
+        handleClickOnObject(eventPoint, target, stopCreatingTarget)
         draw()
     }
 
     if (createdObstacle) {
-        createdObstacle.points.push(point)
+        handleClickOnObject(eventPoint, createdObstacle, stopCreatingObstacle)
         draw()
     }
 })
+
+function handleClickOnObject(
+    eventPoint: Vec2,
+    object: Polygon,
+    close: () => void
+) {
+    const objectPoint = object.points.at(0)
+    if (
+        objectPoint &&
+        distance(objectPoint, eventPoint) < approximationRadius
+    ) {
+        close()
+    } else {
+        object.points.push(eventPoint)
+    }
+}
+
+canvas.addEventListener("mousemove", (event) => {
+    const point = eventPointToCanvasPoint(event)
+
+    if (isCreatingCharacter && character.points.length > 0) {
+        checkMouseEnterExitOnPoint(point, character.points[0])
+    } else if (isCreatingTarget && target.points.length > 0) {
+        checkMouseEnterExitOnPoint(point, target.points[0])
+    } else if (createdObstacle && createdObstacle.points.length > 0) {
+        checkMouseEnterExitOnPoint(point, createdObstacle.points[0])
+    }
+})
+
+function checkMouseEnterExitOnPoint(eventPoint: Vec2, currentPoint: Vec2) {
+    const dist = distance(eventPoint, currentPoint)
+    if (isMouseHoveringPoint && approximationRadius < dist) {
+        isMouseHoveringPoint = false
+        draw()
+    } else if (!isMouseHoveringPoint && dist <= approximationRadius) {
+        isMouseHoveringPoint = true
+        ctx.reset()
+        ctx.fillStyle = "rgb(115, 132, 231)"
+        drawPoint(ctx, currentPoint, approximationRadius)
+        drawWithoutReset()
+    }
+}
 
 createCharacterButton.addEventListener("click", (event) => {
     if (isCreatingCharacter) {
@@ -142,6 +187,10 @@ function stopCreatingTarget() {
 // MARK: Drawing
 function draw() {
     ctx.reset()
+    drawWithoutReset()
+}
+
+function drawWithoutReset() {
     drawCharacter()
     drawTarget()
     drawObstacles()
@@ -183,4 +232,10 @@ function drawObstacles() {
     if (createdObstacle) {
         drawPath(ctx, createdObstacle.points)
     }
+}
+
+// MARK: Utility
+function eventPointToCanvasPoint(event: MouseEvent): Vec2 {
+    const rect = canvas.getBoundingClientRect()
+    return Vec2(event.clientX - rect.x, event.clientY - rect.y)
 }
