@@ -12,7 +12,7 @@
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  background-color: green;
+  background-color: rgb(38, 120, 209);
   color: white;
   border: 1px solid black;
   border-radius: 20px;
@@ -21,7 +21,7 @@
 }
 
 #buttonGroup button:hover {
-  background-color: rgb(53, 167, 53);
+  background-color: rgb(54, 138, 227);
 }
 
 #buttonGroup button span {
@@ -29,14 +29,6 @@
   transition: transform 0.1s ease;
 }
 
-#buttonGroup button.active {
-  background-color: rgb(200, 0, 0);
-}
-
-#buttonGroup button.active:hover {
-  background-color: rgb(223, 57, 57);
-}
-
-#buttonGroup button.active span {
-  transform: scale(1.03);
+#buttonGroup button.disabled {
+  background-color: rgb(153, 154, 155);
 }

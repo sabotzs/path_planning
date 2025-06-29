@@ -45,10 +45,13 @@ canvas.addEventListener("contextmenu", (event) => {
 canvas.addEventListener("mousedown", (event) => {
     if (isCreatingCharacter) {
         handleClickOnObject(event, character, stopCreatingCharacter)
+        updateCreateCharacterButton()
     } else if (isCreatingTarget) {
         handleClickOnObject(event, target, stopCreatingTarget)
+        updateCreateTargetButton()
     } else if (createdObstacle) {
         handleClickOnObject(event, createdObstacle, stopCreatingObstacle)
+        updateCreateObstacleButton()
     }
 })
 
@@ -61,11 +64,10 @@ function handleClickOnObject(
     if (event.button === 0) {
         handleLeftClickOnObject(eventPoint, object, done)
         draw()
-    } else if (
-        event.button === 2 &&
-        handleRightClickOnObject(eventPoint, object)
-    ) {
-        draw()
+    } else if (event.button === 2) {
+        if (handleRightClickOnObject(eventPoint, object)) {
+            draw()
+        }
     }
 }
 
@@ -81,6 +83,7 @@ function handleLeftClickOnObject(
         movedPoint = lastPoint
     } else if (
         firstPoint &&
+        object.points.length > 2 &&
         distance(firstPoint, eventPoint) < approximationRadius
     ) {
         close()
@@ -136,53 +139,85 @@ canvas.addEventListener("mouseup", () => {
 })
 
 createCharacterButton.addEventListener("click", (event) => {
+    if (isCreatingTarget || createdObstacle) {
+        return
+    }
+
     if (isCreatingCharacter) {
-        stopCreatingCharacter()
+        if (character.points.length > 2) {
+            stopCreatingCharacter()
+        }
     } else {
         startCreatingCharacter()
-    }
-    if (isCreatingTarget) {
-        stopCreatingTarget()
-    }
-    if (createdObstacle) {
-        stopCreatingObstacle()
     }
     draw()
 })
 
 createTargetButton.addEventListener("click", (event) => {
+    if (isCreatingCharacter || createdObstacle) {
+        return
+    }
+
     if (isCreatingTarget) {
-        stopCreatingTarget()
+        if (target.points.length > 2) {
+            stopCreatingTarget()
+        }
     } else {
         startCreatingTarget()
-    }
-    if (isCreatingCharacter) {
-        stopCreatingCharacter()
-    }
-    if (createdObstacle) {
-        stopCreatingObstacle()
     }
     draw()
 })
 
 createObstacleButton.addEventListener("click", (event) => {
+    if (isCreatingCharacter || isCreatingTarget) {
+        return
+    }
+
     if (createdObstacle) {
-        stopCreatingObstacle()
+        if (createdObstacle.points.length > 2) {
+            stopCreatingObstacle()
+        }
     } else {
         startCreatingObstacle()
-    }
-    if (isCreatingCharacter) {
-        stopCreatingCharacter()
-    }
-    if (isCreatingTarget) {
-        stopCreatingTarget()
     }
     draw()
 })
 
+function startCreatingCharacter() {
+    character = Polygon([])
+    isCreatingCharacter = true
+    updateCreateCharacterButton()
+    updateCreateTargetButton(false)
+    updateCreateObstacleButton(false)
+}
+
+function stopCreatingCharacter() {
+    isCreatingCharacter = false
+    updateCreateCharacterButton()
+    updateCreateTargetButton(true)
+    updateCreateObstacleButton(true)
+}
+
+function startCreatingTarget() {
+    target = Polygon([])
+    isCreatingTarget = true
+    updateCreateCharacterButton(false)
+    updateCreateTargetButton()
+    updateCreateObstacleButton(false)
+}
+
+function stopCreatingTarget() {
+    isCreatingTarget = false
+    updateCreateCharacterButton(true)
+    updateCreateTargetButton()
+    updateCreateObstacleButton(true)
+}
+
 function startCreatingObstacle() {
     createdObstacle = Polygon([])
-    createObstacleButton.classList.toggle("active", true)
+    updateCreateCharacterButton(false)
+    updateCreateTargetButton(false)
+    updateCreateObstacleButton()
 }
 
 function stopCreatingObstacle() {
@@ -190,29 +225,9 @@ function stopCreatingObstacle() {
 
     obstacles.push(createdObstacle)
     createdObstacle = undefined
-    createObstacleButton.classList.toggle("active", false)
-}
-
-function startCreatingCharacter() {
-    character = Polygon([])
-    isCreatingCharacter = true
-    createCharacterButton.classList.toggle("active", true)
-}
-
-function stopCreatingCharacter() {
-    isCreatingCharacter = false
-    createCharacterButton.classList.toggle("active", false)
-}
-
-function startCreatingTarget() {
-    target = Polygon([])
-    isCreatingTarget = true
-    createTargetButton.classList.toggle("active", true)
-}
-
-function stopCreatingTarget() {
-    isCreatingTarget = false
-    createTargetButton.classList.toggle("active", false)
+    updateCreateCharacterButton(true)
+    updateCreateTargetButton(true)
+    updateCreateObstacleButton()
 }
 
 // MARK: Drawing
@@ -262,6 +277,40 @@ function drawObstacles() {
 
     if (createdObstacle) {
         drawPath(ctx, createdObstacle.points)
+    }
+}
+
+// MARK: Updating Buttons
+function updateCreateCharacterButton(enabled?: boolean) {
+    if (isCreatingCharacter) {
+        const enabled = character.points.length > 2
+        createCharacterButton.classList.toggle("disabled", !enabled)
+    } else if (enabled !== undefined) {
+        createCharacterButton.classList.toggle("disabled", !enabled)
+    } else {
+        createCharacterButton.classList.toggle("disabled", false)
+    }
+}
+
+function updateCreateTargetButton(enabled?: boolean) {
+    if (isCreatingTarget) {
+        const enabled = target.points.length > 2
+        createTargetButton.classList.toggle("disabled", !enabled)
+    } else if (enabled !== undefined) {
+        createTargetButton.classList.toggle("disabled", !enabled)
+    } else {
+        createTargetButton.classList.toggle("disabled", false)
+    }
+}
+
+function updateCreateObstacleButton(enabled?: boolean) {
+    if (createdObstacle) {
+        const enabled = createdObstacle.points.length > 2
+        createObstacleButton.classList.toggle("disabled", !enabled)
+    } else if (enabled !== undefined) {
+        createObstacleButton.classList.toggle("disabled", !enabled)
+    } else {
+        createObstacleButton.classList.toggle("disabled", false)
     }
 }
 
