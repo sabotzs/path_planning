@@ -76,10 +76,6 @@ function handleLeftClickOnObject(
     object: Polygon,
     close: () => void
 ) {
-    if (hasError) {
-        return
-    }
-
     const firstPoint = object.points.at(0)
     const lastPoint = object.points.at(object.points.length - 1)
 
@@ -87,11 +83,12 @@ function handleLeftClickOnObject(
         movedPoint = lastPoint
     } else if (
         firstPoint &&
+        !hasError &&
         object.points.length > 2 &&
         distance(firstPoint, eventPoint) < approximationRadius
     ) {
         close()
-    } else {
+    } else if (!hasError) {
         object.points.push(eventPoint)
     }
 }
