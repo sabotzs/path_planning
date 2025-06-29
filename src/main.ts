@@ -9,6 +9,7 @@ const approximationRadius = 8
 let isCreatingCharacter = false
 let isCreatingTarget = false
 let isMouseHoveringPoint = false
+let movedPoint: Vec2 | undefined = undefined
 
 // MARK: Objects
 let character = Polygon([])
@@ -37,6 +38,10 @@ window.addEventListener("load", () => {
     draw()
 })
 
+canvas.addEventListener("contextmenu", (event) => {
+    event.preventDefault()
+})
+
 canvas.addEventListener("mousedown", (event) => {
     if (isCreatingCharacter) {
         handleClickOnObject(event, character, stopCreatingCharacter)
@@ -45,10 +50,6 @@ canvas.addEventListener("mousedown", (event) => {
     } else if (createdObstacle) {
         handleClickOnObject(event, createdObstacle, stopCreatingObstacle)
     }
-})
-
-canvas.addEventListener("contextmenu", (event) => {
-    event.preventDefault()
 })
 
 function handleClickOnObject(
@@ -73,10 +74,14 @@ function handleLeftClickOnObject(
     object: Polygon,
     close: () => void
 ) {
-    const objectPoint = object.points.at(0)
-    if (
-        objectPoint &&
-        distance(objectPoint, eventPoint) < approximationRadius
+    const firstPoint = object.points.at(0)
+    const lastPoint = object.points.at(object.points.length - 1)
+
+    if (lastPoint && distance(lastPoint, eventPoint) < approximationRadius) {
+        movedPoint = lastPoint
+    } else if (
+        firstPoint &&
+        distance(firstPoint, eventPoint) < approximationRadius
     ) {
         close()
     } else {
@@ -99,11 +104,15 @@ function handleRightClickOnObject(eventPoint: Vec2, object: Polygon): boolean {
 canvas.addEventListener("mousemove", (event) => {
     const point = eventPointToCanvasPoint(event)
 
-    if (isCreatingCharacter && character.points.length > 0) {
+    if (movedPoint) {
+        movedPoint.x = point.x
+        movedPoint.y = point.y
+        draw()
+    } else if (isCreatingCharacter && character.points.length > 2) {
         checkMouseEnterExitOnPoint(point, character.points[0])
-    } else if (isCreatingTarget && target.points.length > 0) {
+    } else if (isCreatingTarget && target.points.length > 2) {
         checkMouseEnterExitOnPoint(point, target.points[0])
-    } else if (createdObstacle && createdObstacle.points.length > 0) {
+    } else if (createdObstacle && createdObstacle.points.length > 2) {
         checkMouseEnterExitOnPoint(point, createdObstacle.points[0])
     }
 })
@@ -121,6 +130,10 @@ function checkMouseEnterExitOnPoint(eventPoint: Vec2, currentPoint: Vec2) {
         drawWithoutReset()
     }
 }
+
+canvas.addEventListener("mouseup", () => {
+    movedPoint = undefined
+})
 
 createCharacterButton.addEventListener("click", (event) => {
     if (isCreatingCharacter) {
