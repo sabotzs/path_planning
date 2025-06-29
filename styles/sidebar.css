@@ -1,7 +1,7 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: flex-start;
   gap: 10px;
 }
@@ -30,4 +30,16 @@
 
 .sidebar button.disabled {
   background-color: rgb(153, 154, 155);
+}
+
+#topSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#navigationButtons {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
 }

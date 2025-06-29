@@ -12,21 +12,30 @@
   <body>
     <div id="container">
       <div class="sidebar" id="sidebarContainer">
-        <div id="icons">
-          <div class="icon" id="ïnfoIcon">
-            <img src="/resources/info.svg" />
-            <div class="tooltip">This is your helpful info message!</div>
+        <div id="topSection">
+          <div id="icons">
+            <div class="icon" id="ïnfoIcon">
+              <img src="/resources/info.svg" />
+              <div class="tooltip">This is your helpful info message!</div>
+            </div>
+            <div class="icon" id="errorIcon">
+              <img src="/resources/x-mark.svg" />
+              <div class="tooltip">
+                The objects must be only convex polygons!
+              </div>
+            </div>
           </div>
-          <div class="icon" id="errorIcon">
-            <img src="/resources/x-mark.svg" />
-            <div class="tooltip">The objects must be only convex polygons!</div>
+
+          <div class="sidebar" id="objectCreationSidebar">
+            <button id="createCharacter"><span>Character</span></button>
+            <button id="createTarget"><span>Target</span></button>
+            <button id="createObstacle"><span>Оbstacle</span></button>
           </div>
         </div>
 
-        <div class="sidebar" id="objectCreationSidebar">
-          <button id="createCharacter"><span>Character</span></button>
-          <button id="createTarget"><span>Target</span></button>
-          <button id="createObstacle"><span>Оbstacle</span></button>
+        <div id="navigationButtons">
+          <button id="backwardButton">&lt;</button>
+          <button id="forwardButton">&gt;</button>
         </div>
       </div>
 
