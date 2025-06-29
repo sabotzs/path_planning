@@ -1,9 +1,13 @@
 import { Polygon } from "../models/Polygon"
 import { Vec2 } from "../models/Vec2"
 
-export function drawPoint(ctx: CanvasRenderingContext2D, point: Vec2) {
+export function drawPoint(
+    ctx: CanvasRenderingContext2D,
+    point: Vec2,
+    radius: number = 4
+) {
     ctx.beginPath()
-    ctx.arc(point.x, point.y, 4, 0, 2 * Math.PI)
+    ctx.arc(point.x, point.y, radius, 0, 2 * Math.PI)
     ctx.fill()
 }
 
