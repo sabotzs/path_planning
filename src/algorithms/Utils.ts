@@ -152,3 +152,21 @@ export function isConvex(polygon: Polygon): boolean {
     }
     return true
 }
+
+export function normaliseOrientation(polygon: Polygon) {
+    if (polygon.points.length < 3) {
+        return
+    }
+
+    const orientation = cross3(
+        polygon.points[0],
+        polygon.points[1],
+        polygon.points[2]
+    )
+    if (strictlyLess(orientation, 0)) {
+        polygon.points = [
+            polygon.points[0],
+            ...polygon.points.slice(1).reverse(),
+        ]
+    }
+}

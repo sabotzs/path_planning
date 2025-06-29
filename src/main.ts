@@ -1,4 +1,4 @@
-import { isConvex } from "./algorithms/Utils"
+import { normaliseOrientation, isConvex } from "./algorithms/Utils"
 import { drawPath, drawPoint, drawPolygon } from "./drawing/Draw"
 import { Polygon } from "./models/Polygon"
 import { distance, Vec2 } from "./models/Vec2"
@@ -197,6 +197,7 @@ function startCreatingCharacter() {
 }
 
 function stopCreatingCharacter() {
+    normaliseOrientation(character)
     isCreatingCharacter = false
     updateCreateCharacterButton()
     updateCreateTargetButton(true)
@@ -212,6 +213,7 @@ function startCreatingTarget() {
 }
 
 function stopCreatingTarget() {
+    normaliseOrientation(target)
     isCreatingTarget = false
     updateCreateCharacterButton(true)
     updateCreateTargetButton()
@@ -228,6 +230,7 @@ function startCreatingObstacle() {
 function stopCreatingObstacle() {
     if (!createdObstacle) return
 
+    normaliseOrientation(createdObstacle)
     obstacles.push(createdObstacle)
     createdObstacle = undefined
     updateCreateCharacterButton(true)
