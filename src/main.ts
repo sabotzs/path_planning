@@ -1,3 +1,4 @@
+import { isConvex } from "./algorithms/Utils"
 import { drawPath, drawPoint, drawPolygon } from "./drawing/Draw"
 import { Polygon } from "./models/Polygon"
 import { distance, Vec2 } from "./models/Vec2"
@@ -10,6 +11,7 @@ let isCreatingCharacter = false
 let isCreatingTarget = false
 let isMouseHoveringPoint = false
 let movedPoint: Vec2 | undefined = undefined
+let hasError = false
 
 // MARK: Objects
 let character = Polygon([])
@@ -30,6 +32,7 @@ const createTargetButton = document.getElementById(
 const createObstacleButton = document.getElementById(
     "createObstacle"
 ) as HTMLButtonElement
+const errorIcon = document.getElementById("errorIcon") as HTMLDivElement
 
 // MARK: Events
 window.addEventListener("load", () => {
@@ -45,13 +48,10 @@ canvas.addEventListener("contextmenu", (event) => {
 canvas.addEventListener("mousedown", (event) => {
     if (isCreatingCharacter) {
         handleClickOnObject(event, character, stopCreatingCharacter)
-        updateCreateCharacterButton()
     } else if (isCreatingTarget) {
         handleClickOnObject(event, target, stopCreatingTarget)
-        updateCreateTargetButton()
     } else if (createdObstacle) {
         handleClickOnObject(event, createdObstacle, stopCreatingObstacle)
-        updateCreateObstacleButton()
     }
 })
 
@@ -63,10 +63,10 @@ function handleClickOnObject(
     const eventPoint = eventPointToCanvasPoint(event)
     if (event.button === 0) {
         handleLeftClickOnObject(eventPoint, object, done)
-        draw()
+        updateUI()
     } else if (event.button === 2) {
         if (handleRightClickOnObject(eventPoint, object)) {
-            draw()
+            updateUI()
         }
     }
 }
@@ -76,6 +76,10 @@ function handleLeftClickOnObject(
     object: Polygon,
     close: () => void
 ) {
+    if (hasError) {
+        return
+    }
+
     const firstPoint = object.points.at(0)
     const lastPoint = object.points.at(object.points.length - 1)
 
@@ -110,7 +114,7 @@ canvas.addEventListener("mousemove", (event) => {
     if (movedPoint) {
         movedPoint.x = point.x
         movedPoint.y = point.y
-        draw()
+        updateUI()
     } else if (isCreatingCharacter && character.points.length > 2) {
         checkMouseEnterExitOnPoint(point, character.points[0])
     } else if (isCreatingTarget && target.points.length > 2) {
@@ -121,6 +125,10 @@ canvas.addEventListener("mousemove", (event) => {
 })
 
 function checkMouseEnterExitOnPoint(eventPoint: Vec2, currentPoint: Vec2) {
+    if (hasError) {
+        return
+    }
+
     const dist = distance(eventPoint, currentPoint)
     if (isMouseHoveringPoint && approximationRadius < dist) {
         isMouseHoveringPoint = false
@@ -280,10 +288,25 @@ function drawObstacles() {
     }
 }
 
-// MARK: Updating Buttons
+// MARK: Updating UI
+function updateUI() {
+    draw()
+    if (isCreatingCharacter) {
+        hasError = !isConvex(character)
+        updateCreateCharacterButton()
+    } else if (isCreatingTarget) {
+        hasError = !isConvex(target)
+        updateCreateTargetButton()
+    } else if (createdObstacle) {
+        hasError = !isConvex(createdObstacle)
+        updateCreateObstacleButton()
+    }
+    errorIcon.style.visibility = hasError ? "visible" : "hidden"
+}
+
 function updateCreateCharacterButton(enabled?: boolean) {
     if (isCreatingCharacter) {
-        const enabled = character.points.length > 2
+        const enabled = character.points.length > 2 && !hasError
         createCharacterButton.classList.toggle("disabled", !enabled)
     } else if (enabled !== undefined) {
         createCharacterButton.classList.toggle("disabled", !enabled)
@@ -294,7 +317,7 @@ function updateCreateCharacterButton(enabled?: boolean) {
 
 function updateCreateTargetButton(enabled?: boolean) {
     if (isCreatingTarget) {
-        const enabled = target.points.length > 2
+        const enabled = target.points.length > 2 && !hasError
         createTargetButton.classList.toggle("disabled", !enabled)
     } else if (enabled !== undefined) {
         createTargetButton.classList.toggle("disabled", !enabled)
@@ -305,7 +328,7 @@ function updateCreateTargetButton(enabled?: boolean) {
 
 function updateCreateObstacleButton(enabled?: boolean) {
     if (createdObstacle) {
-        const enabled = createdObstacle.points.length > 2
+        const enabled = createdObstacle.points.length > 2 && !hasError
         createObstacleButton.classList.toggle("disabled", !enabled)
     } else if (enabled !== undefined) {
         createObstacleButton.classList.toggle("disabled", !enabled)

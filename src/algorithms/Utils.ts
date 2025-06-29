@@ -1,4 +1,5 @@
 import { LineSegment } from "../models/LineSegment"
+import { Polygon } from "../models/Polygon"
 import {
     add,
     cross,
@@ -126,4 +127,28 @@ export function castRay(
         return undefined
     }
     return add(origin, scale(direction, t))
+}
+
+export function isConvex(polygon: Polygon): boolean {
+    const size = polygon.points.length
+    if (size < 3) {
+        return true
+    }
+
+    let orientation = 0
+
+    for (let i = 0; i < size; ++i) {
+        const currentOrientation = cross3(
+            polygon.points[i],
+            polygon.points[(i + 1) % size],
+            polygon.points[(i + 2) % size]
+        )
+
+        if (orientation === 0) {
+            orientation = currentOrientation
+        } else if (orientation * currentOrientation < 0) {
+            return false
+        }
+    }
+    return true
 }
