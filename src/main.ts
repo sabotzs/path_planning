@@ -37,26 +37,38 @@ window.addEventListener("load", () => {
     draw()
 })
 
-canvas.addEventListener("click", (event) => {
-    const eventPoint = eventPointToCanvasPoint(event)
-
+canvas.addEventListener("mousedown", (event) => {
     if (isCreatingCharacter) {
-        handleClickOnObject(eventPoint, character, stopCreatingCharacter)
-        draw()
-    }
-
-    if (isCreatingTarget) {
-        handleClickOnObject(eventPoint, target, stopCreatingTarget)
-        draw()
-    }
-
-    if (createdObstacle) {
-        handleClickOnObject(eventPoint, createdObstacle, stopCreatingObstacle)
-        draw()
+        handleClickOnObject(event, character, stopCreatingCharacter)
+    } else if (isCreatingTarget) {
+        handleClickOnObject(event, target, stopCreatingTarget)
+    } else if (createdObstacle) {
+        handleClickOnObject(event, createdObstacle, stopCreatingObstacle)
     }
 })
 
+canvas.addEventListener("contextmenu", (event) => {
+    event.preventDefault()
+})
+
 function handleClickOnObject(
+    event: MouseEvent,
+    object: Polygon,
+    done: () => void
+) {
+    const eventPoint = eventPointToCanvasPoint(event)
+    if (event.button === 0) {
+        handleLeftClickOnObject(eventPoint, object, done)
+        draw()
+    } else if (
+        event.button === 2 &&
+        handleRightClickOnObject(eventPoint, object)
+    ) {
+        draw()
+    }
+}
+
+function handleLeftClickOnObject(
     eventPoint: Vec2,
     object: Polygon,
     close: () => void
@@ -70,6 +82,18 @@ function handleClickOnObject(
     } else {
         object.points.push(eventPoint)
     }
+}
+
+function handleRightClickOnObject(eventPoint: Vec2, object: Polygon): boolean {
+    if (object.points.length < 1) {
+        return false
+    }
+    const objectPoint = object.points[object.points.length - 1]
+    if (distance(eventPoint, objectPoint) <= approximationRadius) {
+        object.points.pop()
+        return true
+    }
+    return false
 }
 
 canvas.addEventListener("mousemove", (event) => {
