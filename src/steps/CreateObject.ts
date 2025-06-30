@@ -1,5 +1,9 @@
 import { normaliseOrientation, isConvex } from "../algorithms/Utils"
-import { characterColor, obstacleColor, targetColor } from "../drawing/Colors"
+import {
+    setCharacterColor,
+    setObstacleColor,
+    setTargetColor,
+} from "../drawing/Colors"
 import { drawPath, drawPoint, drawPolygon } from "../drawing/Draw"
 import { Polygon } from "../models/Polygon"
 import { distance, Vec2 } from "../models/Vec2"
@@ -281,10 +285,7 @@ function drawWithoutReset() {
 }
 
 function drawCharacter() {
-    const style = characterColor
-    ctx.strokeStyle = style
-    ctx.fillStyle = style
-
+    setCharacterColor(ctx)
     if (isCreatingCharacter) {
         drawPath(ctx, character.points)
     } else {
@@ -293,10 +294,7 @@ function drawCharacter() {
 }
 
 function drawTarget() {
-    const style = targetColor
-    ctx.strokeStyle = style
-    ctx.fillStyle = style
-
+    setTargetColor(ctx)
     if (isCreatingTarget) {
         drawPath(ctx, target.points)
     } else {
@@ -305,10 +303,7 @@ function drawTarget() {
 }
 
 function drawObstacles() {
-    const style = obstacleColor
-    ctx.strokeStyle = style
-    ctx.fillStyle = style
-
+    setObstacleColor(ctx)
     obstacles.forEach((obstacle) => {
         drawPolygon(ctx, obstacle)
     })
