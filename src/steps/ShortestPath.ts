@@ -1,5 +1,5 @@
 import { dijkstra } from "../algorithms/Dijkstra"
-import { setShortestPathColor } from "../drawing/Colors"
+import { setShortestPathStyle } from "../drawing/DrawStyle"
 import { drawPath } from "../drawing/Draw"
 import { Vec2 } from "../models/Vec2"
 import { minkowskiSpaceCharacter, minkowskiSpaceTarget } from "./MinkowskiSpace"
@@ -17,6 +17,6 @@ export function drawShortestPath() {
         graph
     )
 
-    setShortestPathColor(ctx)
+    setShortestPathStyle(ctx)
     drawPath(ctx, shortestPath)
 }

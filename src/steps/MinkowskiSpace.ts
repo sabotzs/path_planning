@@ -1,9 +1,9 @@
 import { minkowskiSum } from "../algorithms/MinkowskiSum"
 import {
-    setCharacterColor,
-    setObstacleColor,
-    setTargetColor,
-} from "../drawing/Colors"
+    setCharacterStyle,
+    setObstacleStyle,
+    setTargetStyle,
+} from "../drawing/DrawStyle"
 import { drawPoint, drawPolygon } from "../drawing/Draw"
 import { offsetPolygon, Polygon } from "../models/Polygon"
 import { Vec2 } from "../models/Vec2"
@@ -27,12 +27,12 @@ export function drawMinkowskiSpace() {
     })
 
     ctx.reset()
-    setCharacterColor(ctx)
+    setCharacterStyle(ctx)
     drawPoint(ctx, minkowskiSpaceCharacter)
 
-    setTargetColor(ctx)
+    setTargetStyle(ctx)
     drawPoint(ctx, minkowskiSpaceTarget)
 
-    setObstacleColor(ctx)
+    setObstacleStyle(ctx)
     minkowskiSpaceObstacles.forEach((obstacle) => drawPolygon(ctx, obstacle))
 }

@@ -1,5 +1,5 @@
 import { visibilityLines } from "../algorithms/VisibilityLine"
-import { setVisibilityLineColor } from "../drawing/Colors"
+import { setVisibilityLineStyle } from "../drawing/DrawStyle"
 import { drawLineSegment } from "../drawing/Draw"
 import { Graph } from "../models/Graph"
 import { polygonToLineSegments } from "../models/Polygon"
@@ -23,7 +23,7 @@ export function drawVisibilityGraph() {
 
     graph = visibilityLines(begin, end, minkowskiSpaceObstacles, lineSegments)
 
-    setVisibilityLineColor(ctx)
+    setVisibilityLineStyle(ctx)
     graph.forEach((edges, vertex) => {
         edges.forEach((edge) => {
             drawLineSegment(ctx, vertex, edge.vertex)
