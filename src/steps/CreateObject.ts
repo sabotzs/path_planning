@@ -1,4 +1,5 @@
 import { normaliseOrientation, isConvex } from "../algorithms/Utils"
+import { characterColor, obstacleColor, targetColor } from "../drawing/Colors"
 import { drawPath, drawPoint, drawPolygon } from "../drawing/Draw"
 import { Polygon } from "../models/Polygon"
 import { distance, Vec2 } from "../models/Vec2"
@@ -36,6 +37,9 @@ const errorIcon = document.getElementById("errorIcon") as HTMLDivElement
 const objectCreationSection = document.getElementById(
     "objectCreationSection"
 ) as HTMLDivElement
+const forwardButton = document.getElementById(
+    "forwardButton"
+) as HTMLButtonElement
 
 // MARK: Events
 export function beginCreateObjects() {
@@ -46,6 +50,8 @@ export function beginCreateObjects() {
     canvas.addEventListener("mousemove", handleMouseMove)
     canvas.addEventListener("mouseup", handleMouseUp)
     objectCreationSection.style.visibility = "visible"
+    drawObjectsOnCanvas()
+    updateForwardButton()
 }
 
 export function endCreateObjects() {
@@ -212,6 +218,7 @@ function startCreatingCharacter() {
     updateCreateCharacterButton()
     updateCreateTargetButton(false)
     updateCreateObstacleButton(false)
+    updateForwardButton()
 }
 
 function stopCreatingCharacter() {
@@ -220,6 +227,7 @@ function stopCreatingCharacter() {
     updateCreateCharacterButton()
     updateCreateTargetButton(true)
     updateCreateObstacleButton(true)
+    updateForwardButton()
 }
 
 function startCreatingTarget() {
@@ -228,6 +236,7 @@ function startCreatingTarget() {
     updateCreateCharacterButton(false)
     updateCreateTargetButton()
     updateCreateObstacleButton(false)
+    updateForwardButton()
 }
 
 function stopCreatingTarget() {
@@ -236,6 +245,7 @@ function stopCreatingTarget() {
     updateCreateCharacterButton(true)
     updateCreateTargetButton()
     updateCreateObstacleButton(true)
+    updateForwardButton()
 }
 
 function startCreatingObstacle() {
@@ -243,6 +253,7 @@ function startCreatingObstacle() {
     updateCreateCharacterButton(false)
     updateCreateTargetButton(false)
     updateCreateObstacleButton()
+    updateForwardButton()
 }
 
 function stopCreatingObstacle() {
@@ -254,6 +265,7 @@ function stopCreatingObstacle() {
     updateCreateCharacterButton(true)
     updateCreateTargetButton(true)
     updateCreateObstacleButton()
+    updateForwardButton()
 }
 
 // MARK: Drawing
@@ -269,7 +281,7 @@ function drawWithoutReset() {
 }
 
 function drawCharacter() {
-    const style = "rgb(31, 109, 46)"
+    const style = characterColor
     ctx.strokeStyle = style
     ctx.fillStyle = style
 
@@ -281,7 +293,7 @@ function drawCharacter() {
 }
 
 function drawTarget() {
-    const style = "rgb(231, 201, 36)"
+    const style = targetColor
     ctx.strokeStyle = style
     ctx.fillStyle = style
 
@@ -293,7 +305,7 @@ function drawTarget() {
 }
 
 function drawObstacles() {
-    const style = "rgb(0, 0, 0)"
+    const style = obstacleColor
     ctx.strokeStyle = style
     ctx.fillStyle = style
 
@@ -353,6 +365,17 @@ function updateCreateObstacleButton(enabled?: boolean) {
     } else {
         createObstacleButton.classList.toggle("disabled", false)
     }
+}
+
+function updateForwardButton() {
+    const isDisabled =
+        isCreatingCharacter ||
+        isCreatingTarget ||
+        createdObstacle !== undefined ||
+        character.points.length < 3 ||
+        target.points.length < 2
+
+    forwardButton.classList.toggle("disabled", isDisabled)
 }
 
 // MARK: Utility

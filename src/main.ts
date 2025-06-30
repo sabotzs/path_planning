@@ -20,11 +20,17 @@ window.addEventListener("load", () => {
     canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
     updateNavigationElements()
+    beginCreateObjects()
 })
 
 canvas.addEventListener("contextmenu", (event) => event.preventDefault())
 
 backwardButton.addEventListener("click", (event) => {
+    const isDisabled = backwardButton.classList.contains("disabled")
+    if (isDisabled) {
+        return
+    }
+
     const previous = previousStep(step)
     if (previous) {
         step = previous
@@ -37,6 +43,11 @@ backwardButton.addEventListener("click", (event) => {
 })
 
 forwardButton.addEventListener("click", (event) => {
+    const isDisabled = forwardButton.classList.contains("disabled")
+    if (isDisabled) {
+        return
+    }
+
     const next = nextStep(step)
     if (next) {
         if (step === "createObject") {
@@ -47,10 +58,9 @@ forwardButton.addEventListener("click", (event) => {
     }
 })
 
+// prettier-ignore
 function updateNavigationElements() {
-    backwardButton.style.visibility =
-        previousStep(step) === undefined ? "hidden" : "visible"
-    forwardButton.style.visibility =
-        nextStep(step) === undefined ? "hidden" : "visible"
+    backwardButton.classList.toggle("disabled", previousStep(step) === undefined)
+    forwardButton.classList.toggle("disabled", nextStep(step) === undefined)
     stepDescriptionLabel.textContent = stepDescription(step)
 }
