@@ -15,3 +15,9 @@ export function setObstacleColor(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = color
     ctx.strokeStyle = color
 }
+
+export function setVisibilityLineColor(ctx: CanvasRenderingContext2D) {
+    const color = "rgb(180, 90, 90)"
+    ctx.fillStyle = color
+    ctx.strokeStyle = color
+}

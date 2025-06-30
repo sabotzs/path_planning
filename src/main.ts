@@ -1,6 +1,7 @@
 import { beginCreateObjects, endCreateObjects } from "./steps/CreateObject"
 import { drawMinkowskiSpace } from "./steps/MinkowskiSpace"
 import { nextStep, previousStep, Step, stepDescription } from "./steps/Step"
+import { drawVisibilityGraph } from "./steps/VisibilityGraph"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
@@ -69,6 +70,7 @@ function updateNavigationElements() {
             drawMinkowskiSpace()
             break
         case "visibilityGraph":
+            drawVisibilityGraph()
             break
         case "dijkstra":
             break
