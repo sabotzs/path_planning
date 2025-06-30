@@ -1,3 +1,4 @@
+import { convexHull } from "../algorithms/ConvexHull"
 import { LineSegment } from "./LineSegment"
 import { add, Vec2 } from "./Vec2"
 
@@ -19,4 +20,10 @@ export function polygonToLineSegments(polygon: Polygon): LineSegment[] {
     return polygon.points.map((point, index) => {
         return LineSegment(point, polygon.points[next(index)])
     })
+}
+
+export function polygonUnion(first: Polygon, second: Polygon): Polygon {
+    const allPoints = first.points.slice().concat(second.points)
+    const union = convexHull(allPoints)
+    return Polygon(union)
 }

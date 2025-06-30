@@ -51,3 +51,7 @@ export function distanceSquared(u: Vec2, v: Vec2): number {
 export function distance(u: Vec2, v: Vec2): number {
     return Math.sqrt(distanceSquared(u, v))
 }
+
+export function perpendicular(v: Vec2): Vec2 {
+    return Vec2(-v.y, v.x)
+}
