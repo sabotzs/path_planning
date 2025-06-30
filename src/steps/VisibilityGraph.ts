@@ -1,6 +1,7 @@
 import { visibilityLines } from "../algorithms/VisibilityLine"
 import { setVisibilityLineColor } from "../drawing/Colors"
 import { drawLineSegment } from "../drawing/Draw"
+import { Graph } from "../models/Graph"
 import { polygonToLineSegments } from "../models/Polygon"
 import {
     minkowskiSpaceCharacter,
@@ -11,6 +12,8 @@ import {
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
 const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
 
+export let graph: Graph
+
 export function drawVisibilityGraph() {
     const begin = minkowskiSpaceCharacter
     const end = minkowskiSpaceTarget
@@ -18,12 +21,7 @@ export function drawVisibilityGraph() {
         polygonToLineSegments(obstacle)
     )
 
-    const graph = visibilityLines(
-        begin,
-        end,
-        minkowskiSpaceObstacles,
-        lineSegments
-    )
+    graph = visibilityLines(begin, end, minkowskiSpaceObstacles, lineSegments)
 
     setVisibilityLineColor(ctx)
     graph.forEach((edges, vertex) => {

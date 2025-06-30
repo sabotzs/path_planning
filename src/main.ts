@@ -1,5 +1,6 @@
 import { beginCreateObjects, endCreateObjects } from "./steps/CreateObject"
 import { drawMinkowskiSpace } from "./steps/MinkowskiSpace"
+import { drawShortestPath } from "./steps/ShortestPath"
 import { nextStep, previousStep, Step, stepDescription } from "./steps/Step"
 import { drawVisibilityGraph } from "./steps/VisibilityGraph"
 
@@ -73,6 +74,7 @@ function updateNavigationElements() {
             drawVisibilityGraph()
             break
         case "dijkstra":
+            drawShortestPath()
             break
         case "finalAnimation":
             break

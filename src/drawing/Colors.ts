@@ -21,3 +21,10 @@ export function setVisibilityLineColor(ctx: CanvasRenderingContext2D) {
     ctx.fillStyle = color
     ctx.strokeStyle = color
 }
+
+export function setShortestPathColor(ctx: CanvasRenderingContext2D) {
+    const color = "rgb(67, 60, 200)"
+    ctx.fillStyle = color
+    ctx.strokeStyle = color
+    ctx.lineWidth = 2
+}
