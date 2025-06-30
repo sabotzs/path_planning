@@ -33,6 +33,9 @@ const createObstacleButton = document.getElementById(
     "createObstacle"
 ) as HTMLButtonElement
 const errorIcon = document.getElementById("errorIcon") as HTMLDivElement
+const objectCreationSection = document.getElementById(
+    "objectCreationSection"
+) as HTMLDivElement
 
 // MARK: Events
 export function beginCreateObjects() {
@@ -42,6 +45,7 @@ export function beginCreateObjects() {
     canvas.addEventListener("mousedown", handleMouseDown)
     canvas.addEventListener("mousemove", handleMouseMove)
     canvas.addEventListener("mouseup", handleMouseUp)
+    objectCreationSection.style.visibility = "visible"
 }
 
 export function endCreateObjects() {
@@ -51,6 +55,7 @@ export function endCreateObjects() {
     canvas.removeEventListener("mousedown", handleMouseDown)
     canvas.removeEventListener("mousemove", handleMouseMove)
     canvas.removeEventListener("mouseup", handleMouseUp)
+    objectCreationSection.style.visibility = "hidden"
 }
 
 // MARK: - Mouse Down

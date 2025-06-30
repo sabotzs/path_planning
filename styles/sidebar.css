@@ -32,7 +32,7 @@
   background-color: rgb(153, 154, 155);
 }
 
-#topSection {
+#objectCreationSection {
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -42,4 +42,15 @@
   display: flex;
   justify-content: space-between;
   gap: 15px;
+}
+
+#stepsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#stepDescription {
+  font-size: 14px;
+  font-weight: bold;
 }
