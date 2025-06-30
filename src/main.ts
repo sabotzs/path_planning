@@ -1,4 +1,5 @@
 import { beginCreateObjects, endCreateObjects } from "./steps/CreateObject"
+import { drawMinkowskiSpace } from "./steps/MinkowskiSpace"
 import { nextStep, previousStep, Step, stepDescription } from "./steps/Step"
 
 const canvas = document.getElementById("canvas") as HTMLCanvasElement
@@ -20,7 +21,6 @@ window.addEventListener("load", () => {
     canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
     updateNavigationElements()
-    beginCreateObjects()
 })
 
 canvas.addEventListener("contextmenu", (event) => event.preventDefault())
@@ -35,10 +35,6 @@ backwardButton.addEventListener("click", (event) => {
     if (previous) {
         step = previous
         updateNavigationElements()
-
-        if (step === "createObject") {
-            beginCreateObjects()
-        }
     }
 })
 
@@ -50,17 +46,33 @@ forwardButton.addEventListener("click", (event) => {
 
     const next = nextStep(step)
     if (next) {
-        if (step === "createObject") {
-            endCreateObjects()
-        }
         step = next
         updateNavigationElements()
     }
 })
 
-// prettier-ignore
 function updateNavigationElements() {
+    // prettier-ignore
     backwardButton.classList.toggle("disabled", previousStep(step) === undefined)
     forwardButton.classList.toggle("disabled", nextStep(step) === undefined)
     stepDescriptionLabel.textContent = stepDescription(step)
+
+    if (step !== "createObject") {
+        endCreateObjects()
+    }
+
+    switch (step) {
+        case "createObject":
+            beginCreateObjects()
+            break
+        case "minkowskiSum":
+            drawMinkowskiSpace()
+            break
+        case "visibilityGraph":
+            break
+        case "dijkstra":
+            break
+        case "finalAnimation":
+            break
+    }
 }
