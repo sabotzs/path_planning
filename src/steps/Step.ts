@@ -3,7 +3,6 @@ export type Step =
     | "minkowskiSum"
     | "visibilityGraph"
     | "dijkstra"
-    | "finalAnimation"
 
 export function nextStep(step: Step): Step | undefined {
     switch (step) {
@@ -14,8 +13,6 @@ export function nextStep(step: Step): Step | undefined {
         case "visibilityGraph":
             return "dijkstra"
         case "dijkstra":
-            return "finalAnimation"
-        case "finalAnimation":
             return undefined
     }
 }
@@ -30,8 +27,6 @@ export function previousStep(step: Step): Step | undefined {
             return "minkowskiSum"
         case "dijkstra":
             return "visibilityGraph"
-        case "finalAnimation":
-            return "dijkstra"
     }
 }
 
@@ -45,7 +40,5 @@ export function stepDescription(step: Step): string {
             return "Visibility Graph"
         case "dijkstra":
             return "Shortest path"
-        case "finalAnimation":
-            return "Animation"
     }
 }

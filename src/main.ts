@@ -94,7 +94,9 @@ function checkCollisionsAndMakeUnions(obstacles: Polygon[]): Polygon[] {
 function drawVisibilityGraph() {
     const begin = minkowskiSpaceCharacter
     const end = minkowskiSpaceTarget
-    const collidedObstacles = checkCollisionsAndMakeUnions(minkowskiSpaceObstacles)
+    const collidedObstacles = checkCollisionsAndMakeUnions(
+        minkowskiSpaceObstacles
+    )
 
     const lineSegments = collidedObstacles.flatMap((obstacle) =>
         polygonToLineSegments(obstacle)
@@ -102,6 +104,8 @@ function drawVisibilityGraph() {
 
     graph = visibilityLines(begin, end, collidedObstacles, lineSegments)
 
+    ctx.reset()
+    drawMinkowskiSpace()
     setVisibilityLineStyle(ctx)
     graph.forEach((edges, vertex) => {
         edges.forEach((edge) => {
@@ -191,8 +195,6 @@ function updateNavigationElements() {
             break
         case "dijkstra":
             drawShortestPath()
-            break
-        case "finalAnimation":
             break
     }
 }
