@@ -1,4 +1,5 @@
 import { dijkstra } from "./algorithms/Dijkstra"
+import { checkCollision } from "./algorithms/GJK"
 import { minkowskiSum } from "./algorithms/MinkowskiSum"
 import { visibilityLines } from "./algorithms/VisibilityLine"
 import {
@@ -15,7 +16,13 @@ import {
     setShortestPathStyle,
 } from "./drawing/DrawStyle"
 import { Graph } from "./models/Graph"
-import { offsetPolygon, Polygon, polygonToLineSegments } from "./models/Polygon"
+import {
+    offsetPolygon,
+    Polygon,
+    polygonBoundingBox,
+    polygonToLineSegments,
+    polygonUnion,
+} from "./models/Polygon"
 import { Vec2 } from "./models/Vec2"
 import {
     beginCreateObjects,
@@ -25,6 +32,8 @@ import {
     target,
 } from "./steps/CreateObject"
 import { nextStep, previousStep, Step, stepDescription } from "./steps/Step"
+import scc from "@rtsao/scc"
+import rtreeLib from "rtree"
 
 // MARK: - State
 let step: Step = "createObject"
@@ -56,46 +65,42 @@ function drawMinkowskiSpace() {
     minkowskiSpaceObstacles.forEach((obstacle) => drawPolygon(ctx, obstacle))
 }
 
-// function checkCollisionsAndMakeUnions(obstacles: Polygon[]): Polygon[] {
-//     const rtree = RTree(obstacles.length)
+function checkCollisionsAndMakeUnions(obstacles: Polygon[]): Polygon[] {
+    const polygonsWithAABB = obstacles.map((obstacle) => {
+        return { polygon: obstacle, aabb: polygonBoundingBox(obstacle) }
+    })
 
-//     const polygonsWithAABB = obstacles.map((obstacle) => {
-//         return { polygon: obstacle, aabb: polygonBoundingBox(obstacle) }
-//     })
+    const rtree = rtreeLib(obstacles.length)
+    polygonsWithAABB.forEach((obstacle) =>
+        rtree.insert(obstacle.aabb, obstacle.polygon)
+    )
 
-//     polygonsWithAABB.forEach((obstacle) => {
-//         rtree.insert(obstacle.aabb, obstacle.polygon)
-//     })
+    const graph = new Map<Polygon, Set<Polygon>>()
+    polygonsWithAABB.forEach((current) => {
+        const overlapping = rtree.search(current.aabb) as Polygon[]
+        const colliding = overlapping.filter((other) => {
+            return (
+                other === current.polygon ||
+                checkCollision(current.polygon, other)
+            )
+        })
+        graph.set(current.polygon, new Set(colliding))
+    })
+    const components = scc(graph)
 
-//     const set = new Set<Polygon>(obstacles)
-//     polygonsWithAABB.forEach((obstacle) => {
-//         const overlapping = rtree.search(obstacle.aabb) as Polygon[]
-//         let hasOverlapping = false
-//         overlapping.forEach((overlapped) => {
-//             if (overlapped === obstacle.polygon) {
-//                 return
-//             }
-//             if (checkCollision(obstacle.polygon, overlapped)) {
-//                 set.delete(overlapped)
-//                 const union = polygonUnion(obstacle.polygon, overlapped)
-//                 set.
-//             }
-//         })
-//     })
-
-//     return []
-// }
+    return components.map((colliding) => polygonUnion(...colliding))
+}
 
 function drawVisibilityGraph() {
     const begin = minkowskiSpaceCharacter
     const end = minkowskiSpaceTarget
+    const collidedObstacles = checkCollisionsAndMakeUnions(minkowskiSpaceObstacles)
 
-    checkCollisionsAndMakeUnions(minkowskiSpaceObstacles)
-    const lineSegments = minkowskiSpaceObstacles.flatMap((obstacle) =>
+    const lineSegments = collidedObstacles.flatMap((obstacle) =>
         polygonToLineSegments(obstacle)
     )
 
-    graph = visibilityLines(begin, end, minkowskiSpaceObstacles, lineSegments)
+    graph = visibilityLines(begin, end, collidedObstacles, lineSegments)
 
     setVisibilityLineStyle(ctx)
     graph.forEach((edges, vertex) => {

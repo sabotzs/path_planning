@@ -74,15 +74,17 @@ function trippleProduct(a: Vec2, b: Vec2, c: Vec2): Vec2 {
 
 function supportPoint(first: Polygon, second: Polygon, direction: Vec2): Vec2 {
     const support = (polygon: Polygon, direction: Vec2): Vec2 => {
-        let bestDot = 0
-        return polygon.points.reduce((best, current) => {
-            const currentDot = dot(current, direction)
-            if (bestDot < currentDot) {
-                bestDot = currentDot
-                return current
+        let maxDistance = -Infinity
+        let furthest = polygon.points[0]
+
+        for (const point of polygon.points) {
+            const distance = dot(point, direction)
+            if (maxDistance < distance) {
+                furthest = point
+                maxDistance = distance
             }
-            return best
-        })
+        }
+        return furthest
     }
 
     const p1 = support(first, direction)

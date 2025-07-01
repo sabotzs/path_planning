@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@datastructures-js/binary-search-tree": "^5.3.2",
+    "@rtsao/scc": "^1.1.0",
     "@types/rtree": "^1.4.30",
     "@tyriar/fibonacci-heap": "^2.0.9",
     "rtree": "^1.4.2"
