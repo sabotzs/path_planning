@@ -23,8 +23,8 @@ export function polygonToLineSegments(polygon: Polygon): LineSegment[] {
     })
 }
 
-export function polygonUnion(first: Polygon, second: Polygon): Polygon {
-    const allPoints = first.points.slice().concat(second.points)
+export function polygonUnion(polygons: Polygon[]): Polygon {
+    const allPoints = polygons.flatMap((polygon) => polygon.points)
     const union = convexHull(allPoints)
     return Polygon(union)
 }
