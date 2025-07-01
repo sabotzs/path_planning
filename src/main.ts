@@ -56,9 +56,41 @@ function drawMinkowskiSpace() {
     minkowskiSpaceObstacles.forEach((obstacle) => drawPolygon(ctx, obstacle))
 }
 
+// function checkCollisionsAndMakeUnions(obstacles: Polygon[]): Polygon[] {
+//     const rtree = RTree(obstacles.length)
+
+//     const polygonsWithAABB = obstacles.map((obstacle) => {
+//         return { polygon: obstacle, aabb: polygonBoundingBox(obstacle) }
+//     })
+
+//     polygonsWithAABB.forEach((obstacle) => {
+//         rtree.insert(obstacle.aabb, obstacle.polygon)
+//     })
+
+//     const set = new Set<Polygon>(obstacles)
+//     polygonsWithAABB.forEach((obstacle) => {
+//         const overlapping = rtree.search(obstacle.aabb) as Polygon[]
+//         let hasOverlapping = false
+//         overlapping.forEach((overlapped) => {
+//             if (overlapped === obstacle.polygon) {
+//                 return
+//             }
+//             if (checkCollision(obstacle.polygon, overlapped)) {
+//                 set.delete(overlapped)
+//                 const union = polygonUnion(obstacle.polygon, overlapped)
+//                 set.
+//             }
+//         })
+//     })
+
+//     return []
+// }
+
 function drawVisibilityGraph() {
     const begin = minkowskiSpaceCharacter
     const end = minkowskiSpaceTarget
+
+    checkCollisionsAndMakeUnions(minkowskiSpaceObstacles)
     const lineSegments = minkowskiSpaceObstacles.flatMap((obstacle) =>
         polygonToLineSegments(obstacle)
     )

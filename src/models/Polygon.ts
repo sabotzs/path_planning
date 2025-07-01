@@ -1,5 +1,6 @@
 import { convexHull } from "../algorithms/ConvexHull"
 import { LineSegment } from "./LineSegment"
+import { Rect } from "./Rect"
 import { add, Vec2 } from "./Vec2"
 
 export type Polygon = {
@@ -26,4 +27,21 @@ export function polygonUnion(first: Polygon, second: Polygon): Polygon {
     const allPoints = first.points.slice().concat(second.points)
     const union = convexHull(allPoints)
     return Polygon(union)
+}
+
+export function polygonBoundingBox(polygon: Polygon): Rect {
+    const { min, max } = Math
+    let minX: number = polygon.points[0].x
+    let minY: number = polygon.points[0].y
+    let maxX: number = polygon.points[0].x
+    let maxY: number = polygon.points[0].y
+
+    for (let i = 1; i < polygon.points.length; ++i) {
+        minX = min(minX, polygon.points[i].x)
+        maxX = max(maxX, polygon.points[i].x)
+        minY = min(minY, polygon.points[i].y)
+        maxY = max(maxY, polygon.points[i].y)
+    }
+
+    return Rect(minX, minY, maxX - minX, maxY - minY)
 }
